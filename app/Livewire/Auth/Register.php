@@ -1,0 +1,62 @@
+<?php
+namespace App\Livewire\Auth;
+
+use App\Models\User;
+use Livewire\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+#[Layout('layouts.guest')]
+class Register extends Component
+{
+    public $name = '';
+    public $email = '';
+    public $password = '';
+    public $password_confirmation = '';
+    public $no_telepon = '';
+    public $alamat = '';
+
+    protected $rules = [
+        'name' => 'required|string|max:100',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6|confirmed',
+        'no_telepon' => 'nullable|string|max:20',
+        'alamat' => 'nullable|string',
+    ];
+
+    protected $messages = [
+        'name.required' => 'Nama wajib diisi',
+        'email.required' => 'Email wajib diisi',
+        'email.email' => 'Format email tidak valid',
+        'email.unique' => 'Email sudah terdaftar',
+        'password.required' => 'Password wajib diisi',
+        'password.min' => 'Password minimal 6 karakter',
+        'password.confirmed' => 'Konfirmasi password tidak cocok',
+    ];
+
+    public function register()
+    {
+        $this->validate();
+
+        $user = User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+            'no_telepon' => $this->no_telepon,
+            'alamat' => $this->alamat,
+            'role' => 'customer',
+            'is_active' => true,
+        ]);
+
+        Auth::login($user);
+
+        session()->flash('success', 'Registrasi berhasil! Selamat datang di IslamicAdvanture.');
+        return redirect()->route('home');
+    }
+
+    public function render()
+    {
+        return view('livewire.auth.register');
+    }
+}
