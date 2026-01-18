@@ -4,11 +4,11 @@
 // ==========================================
 
 namespace App\Livewire\Booking;
-
-use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-#[layout('layouts.app')]
+use Livewire\Component;
+
+#[Layout('layouts.app')]
 class Cart extends Component
 {
     public $cart = [];

@@ -162,17 +162,22 @@
                                 </p>
                             </div>
                             
-                            <div class="flex gap-2">
+                           <div class="flex gap-2">
+                                {{-- Tombol Icon Mata (Tetap ke Show) --}}
                                 <a href="{{ route('packages.show', $package->id) }}" class="p-3 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors border border-transparent hover:border-emerald-100">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </a>
-                                <button 
-                                    wire:click="addToCart({{ $package->id }})"
-                                    class="px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-emerald-600 transition-colors shadow-lg hover:shadow-emerald-500/30 flex items-center font-medium text-sm"
-                                >
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                    Pesan
-                                </button>
+
+                                {{-- Tombol Utama (PERBAIKAN: Menggunakan tag <a> dan href) --}}
+                                <a href="{{ route('packages.show', $package->id) }}" 
+                                class="px-4 py-3 bg-gray-900 text-white rounded-xl hover:bg-emerald-600 transition-colors shadow-lg hover:shadow-emerald-500/30 flex items-center font-medium text-sm cursor-pointer">
+                                    
+                                    {{-- Icon Panah Kanan (Lebih cocok untuk 'Lihat Detail') --}}
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Lihat Detail
+                                </a>
                             </div>
                         </div>
                     </div>

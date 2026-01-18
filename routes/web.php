@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str; // Tambahan untuk random password
-use Laravel\Socialite\Facades\Socialite; // Tambahan untuk Socialite
-use App\Models\User; // Tambahan untuk Model User
+use Illuminate\Support\Str; 
+use Laravel\Socialite\Facades\Socialite; 
+use App\Models\User; 
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +21,7 @@ use App\Livewire\Auth\ForgotPassword;
 |--------------------------------------------------------------------------
 */
 use App\Livewire\Home;
+use App\Livewire\Gallery;
 use App\Livewire\Mountains\Index as MountainsIndex;
 use App\Livewire\Mountains\Show as MountainShow;
 use App\Livewire\Equipment\Index as EquipmentIndex;
@@ -40,7 +41,6 @@ use App\Livewire\User\Dashboard;
 use App\Livewire\User\BookingHistory;
 use App\Livewire\User\Profile;
 use App\Livewire\User\BookingShow;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +62,8 @@ use App\Livewire\Admin\Payments\Show as PaymentShow;
 use App\Livewire\Admin\Reviews\Index as AdminReviewsIndex;
 use App\Livewire\Admin\Users\Index as AdminUsersIndex;
 use App\Livewire\Admin\Reports\Index as AdminReportsIndex;
+use Illuminate\Http\Request;
+use App\Models\Booking;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +71,7 @@ use App\Livewire\Admin\Reports\Index as AdminReportsIndex;
 |--------------------------------------------------------------------------
 */
 Route::get('/', Home::class)->name('home');
+Route::get('/gallery', Gallery::class)->name('gallery');
 
 /*
 |--------------------------------------------------------------------------
@@ -81,45 +84,33 @@ Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
 
     // --- GOOGLE LOGIN ROUTES ---
-    
-    // 1. Redirect ke Google
     Route::get('/auth/google', function () {
         return Socialite::driver('google')->redirect();
     })->name('auth.google');
 
-    // 2. Callback dari Google
     Route::get('/auth/google/callback', function () {
         try {
             $googleUser = Socialite::driver('google')->user();
             
-            // Cari user berdasarkan email atau buat baru
             $user = User::updateOrCreate([
                 'email' => $googleUser->getEmail(),
             ], [
                 'name' => $googleUser->getName(),
                 'google_id' => $googleUser->getId(),
-                // Set password random karena login via Google
                 'password' => bcrypt(Str::random(16)), 
-                // Otomatis verifikasi email
                 'email_verified_at' => now(), 
-                // Pastikan user aktif (sesuai middleware 'active' Anda)
-                // Sesuaikan 'is_active' dengan nama kolom di database Anda (misal: status, active, dll)
-                // 'is_active' => true, 
+                // 'is_active' => true, // Uncomment jika perlu
             ]);
         
-            // Login user
             Auth::login($user, true);
         
-            // Cek Role untuk Redirect (Opsional, sesuaikan logika role Anda)
-            if ($user->role === 'admin') { // Pastikan kolom 'role' ada
+            if ($user->role === 'admin') { 
                 return redirect()->route('admin.dashboard');
             }
 
-            // Default redirect ke User Dashboard
             return redirect()->route('user.dashboard');
 
         } catch (\Exception $e) {
-            // Jika gagal atau cancel, balik ke login dengan error
             return redirect()->route('login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
         }
     });
@@ -154,23 +145,28 @@ Route::prefix('packages')->name('packages.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| AUTHENTICATED USER (PREFIX user.)
+| AUTHENTICATED USER (DIPISAH JADI 2 GROUP)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'active'])
-    ->prefix('user')
-    ->name('user.')
-    ->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
 
+    // 1. Group User Dashboard & Profile (Prefix: user.xxx)
+    Route::prefix('user')->name('user.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/bookings', BookingHistory::class)->name('bookings.history');
-        Route::get('/bookings/{booking}', BookingShow::class)
-            ->name('bookings.show');
+        Route::get('/bookings/{booking}', BookingShow::class)->name('bookings.show');
         Route::get('/profile', Profile::class)->name('profile');
+        
+        // Tetap di user.payment.process (sesuai logika user dashboard)
+        Route::get('/payment/{booking}', PaymentProcess::class)->name('payment.process');
+    });
 
+    // 2. Group Booking Process / Cart (Prefix: booking.xxx)
+    // INI YANG MEMPERBAIKI ERROR 'booking.cart'
+    Route::prefix('booking')->name('booking.')->group(function () {
         Route::get('/cart', Cart::class)->name('cart');
         Route::get('/checkout', Checkout::class)->name('checkout');
-        Route::get('/payment/{booking}', PaymentProcess::class)->name('payment.process');
+    });
 
 });
 
@@ -207,8 +203,28 @@ Route::middleware(['auth', 'admin', 'active'])
         });
 
         Route::prefix('bookings')->name('bookings.')->group(function () {
-            Route::get('/', AdminBookingsIndex::class)->name('index');
-            Route::get('{booking}', AdminBookingDetail::class)->name('detail');
+        Route::get('/', AdminBookingsIndex::class)->name('index');
+
+        // --- BAGIAN BARU: Route Cetak Laporan (Tanpa Controller) ---
+        Route::get('/print-daily', function (Request $request) {
+            // 1. Ambil tanggal dari URL, jika tidak ada pakai hari ini
+            $date = $request->query('date', now()->format('Y-m-d'));
+
+            // 2. Ambil data booking sesuai tanggal tersebut
+            // Anda bisa ganti 'created_at' dengan 'tanggal_mulai' jika ingin laporan berdasarkan jadwal naik
+            $bookings = Booking::with(['user', 'items', 'payment'])
+                        ->whereDate('created_at', $date) 
+                        ->latest()
+                        ->get();
+
+            // 3. Hitung ringkasan
+            $totalRevenue = $bookings->where('status_booking', '!=', 'cancelled')->sum('total_biaya');
+            $totalTransactions = $bookings->count();
+
+            // 4. Return ke Blade khusus cetak
+            return view('pdf.booking', compact('bookings', 'date', 'totalRevenue', 'totalTransactions'));
+        })->name('pdf');
+        Route::get('{booking}', AdminBookingDetail::class)->name('detail');
         });
 
         Route::get('payments', AdminPaymentsIndex::class)->name('payments.index');

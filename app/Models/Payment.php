@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Payment extends Model
 {
@@ -15,6 +13,7 @@ class Payment extends Model
         'booking_id',
         'jumlah_bayar',
         'metode_pembayaran',
+        'payment_type',            // BARU
         'status_pembayaran',
         'tanggal_pembayaran',
         'bukti_pembayaran_url',
@@ -27,42 +26,75 @@ class Payment extends Model
         'tanggal_pembayaran' => 'datetime',
     ];
 
-    /* ================= RELATIONSHIPS ================= */
-
-    public function booking(): BelongsTo
+    // Relationships
+    public function booking()
     {
         return $this->belongsTo(Booking::class);
     }
 
-    /**
-     * 🔥 User pemilik payment (via booking)
-     */
-    public function user(): HasOneThrough
-    {
-        return $this->hasOneThrough(
-            User::class,
-            Booking::class,
-            'id',        // PK di bookings
-            'id',        // PK di users
-            'booking_id',
-            'user_id'
-        );
-    }
-
-    public function verifiedBy(): BelongsTo
+    public function verifiedBy()
     {
         return $this->belongsTo(User::class, 'verified_by');
     }
 
-    /* ================= HELPERS ================= */
-
-    public function isPending(): bool
+    // Status Checkers
+    public function isPending()
     {
         return $this->status_pembayaran === 'pending';
     }
 
-    public function isVerified(): bool
+    public function isVerified()
     {
         return $this->status_pembayaran === 'verified';
+    }
+
+    public function isRejected()
+    {
+        return $this->status_pembayaran === 'rejected';
+    }
+
+    // Payment Type Checkers
+    public function isOnlinePayment()
+    {
+        return $this->payment_type === 'online';
+    }
+
+    public function isManualPayment()
+    {
+        return $this->payment_type === 'manual';
+    }
+
+    // Helper Methods
+    public function getStatusBadgeColor()
+    {
+        return match($this->status_pembayaran) {
+            'pending' => 'yellow',
+            'verified' => 'green',
+            'rejected' => 'red',
+            'failed' => 'red',
+            'refunded' => 'gray',
+            default => 'gray'
+        };
+    }
+
+    public function getPaymentTypeLabel()
+    {
+        return match($this->payment_type) {
+            'online' => 'Transfer Online',
+            'manual' => 'Pembayaran Manual',
+            default => ucfirst($this->payment_type)
+        };
+    }
+
+    public function getStatusLabel()
+    {
+        return match($this->status_pembayaran) {
+            'pending' => 'Menunggu Verifikasi',
+            'verified' => 'Terverifikasi',
+            'rejected' => 'Ditolak',
+            'failed' => 'Gagal',
+            'refunded' => 'Dikembalikan',
+            default => ucfirst($this->status_pembayaran)
+        };
     }
 }

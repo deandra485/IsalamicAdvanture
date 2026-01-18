@@ -1,13 +1,20 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Booking extends Model
 {
     use HasFactory;
 
+    /**
+     * ===============================
+     * Mass Assignment
+     * ===============================
+     */
     protected $fillable = [
         'user_id',
         'package_id',
@@ -24,14 +31,33 @@ class Booking extends Model
         'confirmed_by',
     ];
 
+    /**
+     * ===============================
+     * Casting
+     * ===============================
+     */
     protected $casts = [
-        'tanggal_mulai' => 'date',
+        'tanggal_mulai'   => 'date',
         'tanggal_selesai' => 'date',
-        'total_biaya' => 'decimal:2',
-        'durasi_hari' => 'integer',
+        'durasi_hari'     => 'integer',
+        'total_biaya'     => 'decimal:2',
     ];
 
-    // Relationships
+    /**
+     * ===============================
+     * Appended Attributes
+     * ===============================
+     */
+    protected $appends = [
+        'booking_code',
+        'total_peserta',
+    ];
+
+    /**
+     * ===============================
+     * Relationships
+     * ===============================
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -62,7 +88,38 @@ class Booking extends Model
         return $this->hasOne(Review::class);
     }
 
-    // Helper methods
+    /**
+     * ===============================
+     * Accessors
+     * ===============================
+     */
+
+    // Booking Code otomatis → TRX-00001
+    public function getBookingCodeAttribute()
+    {
+        return $this->attributes['booking_code']
+            ?? 'TRX-' . str_pad($this->id, 5, '0', STR_PAD_LEFT);
+    }
+
+    // Total peserta (fallback aman)
+    public function getTotalPesertaAttribute()
+    {
+        if (isset($this->attributes['quantity'])) {
+            return (int) $this->attributes['quantity'];
+        }
+
+        if ($this->relationLoaded('items')) {
+            return $this->items->sum('quantity');
+        }
+
+        return 1;
+    }
+
+    /**
+     * ===============================
+     * Helper Methods
+     * ===============================
+     */
     public function isPending()
     {
         return $this->status_booking === 'pending';
@@ -73,6 +130,11 @@ class Booking extends Model
         return $this->status_booking === 'confirmed';
     }
 
+    public function isOngoing()
+    {
+        return $this->status_booking === 'ongoing';
+    }
+
     public function isCompleted()
     {
         return $this->status_booking === 'completed';
@@ -81,5 +143,22 @@ class Booking extends Model
     public function canBeCancelled()
     {
         return in_array($this->status_booking, ['pending', 'confirmed']);
+    }
+
+    /**
+     * ===============================
+     * Model Events
+     * ===============================
+     */
+    protected static function booted()
+    {
+        static::creating(function ($booking) {
+            // Auto hitung durasi jika belum diisi
+            if (!$booking->durasi_hari && $booking->tanggal_mulai && $booking->tanggal_selesai) {
+                $booking->durasi_hari =
+                    Carbon::parse($booking->tanggal_mulai)
+                        ->diffInDays(Carbon::parse($booking->tanggal_selesai)) + 1;
+            }
+        });
     }
 }

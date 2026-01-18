@@ -1,7 +1,4 @@
 <?php
-// ==========================================
-// APP/LIVEWIRE/ADMIN/BOOKINGS/INDEX.PHP
-// ==========================================
 
 namespace App\Livewire\Admin\Bookings;
 
@@ -10,8 +7,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
-#[layout('layouts.admin')]
+#[Layout('layouts.admin')]
 class Index extends Component
 {
     use WithPagination;
@@ -21,76 +19,116 @@ class Index extends Component
     public $dateFilter = '';
     public $sortBy = 'created_at';
     public $sortDirection = 'desc';
+    
+    // ✅ PERBAIKAN: Tracking status changes per booking
+    public $statusChanges = [];
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
+    public function updatingSearch() { $this->resetPage(); }
+    public function updatingStatusFilter() { $this->resetPage(); }
+    public function updatingDateFilter() { $this->resetPage(); }
+    public function updatingSortBy() { $this->resetPage(); }
 
-    public function updateStatus($bookingId, $newStatus)
+    // ✅ PERBAIKAN: Simplified updateStatus method
+    public function updateStatus($bookingId)
     {
+        $newStatus = $this->statusChanges[$bookingId] ?? null;
+        
+        if (!$newStatus) {
+            session()->flash('error', 'Status tidak valid!');
+            return;
+        }
+
+        $validStatuses = ['pending', 'confirmed', 'ongoing', 'completed', 'cancelled'];
+        
+        if (!in_array($newStatus, $validStatuses)) {
+            session()->flash('error', 'Status tidak valid!'); 
+            return;
+        }
+
         try {
             $booking = Booking::findOrFail($bookingId);
             $oldStatus = $booking->status_booking;
+
+            if ($oldStatus === $newStatus) {
+                return;
+            }
             
+            // Update Database
             $booking->update([
                 'status_booking' => $newStatus,
-                'confirmed_by' => Auth::id(),
+                'confirmed_by'   => Auth::id(), 
             ]);
 
-            // Log activity
-            \App\Models\ActivityLog::log(
-                'update',
-                'bookings',
-                $bookingId,
-                "Changed booking status from {$oldStatus} to {$newStatus}"
-            );
-
-            // Send notification to customer
-            if ($newStatus === 'confirmed') {
-                $booking->user->notify(new \App\Notifications\BookingConfirmed($booking));
+            // Kirim Notifikasi
+            if ($newStatus === 'confirmed' && class_exists('\App\Notifications\BookingConfirmed')) {
+                try {
+                    $booking->user->notify(new \App\Notifications\BookingConfirmed($booking));
+                } catch (\Throwable $e) {
+                    Log::error('Gagal kirim email: ' . $e->getMessage());
+                }
             }
 
-            session()->flash('success', 'Status booking berhasil diubah!');
-        } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengubah status: ' . $e->getMessage());
+            session()->flash('success', "Booking #{$bookingId} berubah dari {$oldStatus} menjadi {$newStatus}");
+            
+        } catch (\Throwable $e) {
+            Log::error('Update Status Error: ' . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
         }
     }
 
     public function render()
     {
-        $query = Booking::with(['user', 'items.equipment', 'payment']);
+        $query = Booking::with(['user', 'payment', 'items']); 
 
+        // Filter Search
         if ($this->search) {
             $query->where(function($q) {
                 $q->where('id', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('user', function($q2) {
-                      $q2->where('name', 'like', '%' . $this->search . '%')
-                         ->orWhere('email', 'like', '%' . $this->search . '%');
+                  ->orWhereHas('user', function($u) {
+                      $u->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%');
                   });
             });
         }
 
+        // Filter Status
         if ($this->statusFilter) {
             $query->where('status_booking', $this->statusFilter);
         }
 
+        // Filter Date
         if ($this->dateFilter) {
             $query->whereDate('created_at', $this->dateFilter);
         }
 
-        $query->orderBy($this->sortBy, $this->sortDirection);
+        // Sorting
+        $allowedSorts = ['created_at', 'tanggal_mulai', 'total_biaya'];
+        $sortColumn = in_array($this->sortBy, $allowedSorts) ? $this->sortBy : 'created_at';
+        
+        $query->orderBy($sortColumn, $this->sortDirection);
 
-        $bookings = $query->paginate(15);
+        $bookings = $query->paginate(10);
+
+        // ✅ PERBAIKAN: Initialize statusChanges untuk setiap booking
+        foreach ($bookings as $booking) {
+            if (!isset($this->statusChanges[$booking->id])) {
+                $this->statusChanges[$booking->id] = $booking->status_booking;
+            }
+        }
 
         // Stats
+        $statsRaw = Booking::selectRaw('status_booking, count(*) as total')
+                    ->groupBy('status_booking')
+                    ->pluck('total', 'status_booking')
+                    ->toArray();
+
         $stats = [
-            'total' => Booking::count(),
-            'pending' => Booking::where('status_booking', 'pending')->count(),
-            'confirmed' => Booking::where('status_booking', 'confirmed')->count(),
-            'ongoing' => Booking::where('status_booking', 'ongoing')->count(),
-            'completed' => Booking::where('status_booking', 'completed')->count(),
-            'cancelled' => Booking::where('status_booking', 'cancelled')->count(),
+            'total'     => array_sum($statsRaw),
+            'pending'   => $statsRaw['pending'] ?? 0,
+            'confirmed' => $statsRaw['confirmed'] ?? 0,
+            'ongoing'   => $statsRaw['ongoing'] ?? 0,
+            'completed' => $statsRaw['completed'] ?? 0,
+            'cancelled' => $statsRaw['cancelled'] ?? 0,
         ];
 
         return view('livewire.admin.bookings.index', [

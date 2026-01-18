@@ -306,7 +306,7 @@
                                 @foreach($booking->items as $item)
                                 <div class="flex items-start justify-between group">
                                     <div>
-                                        <p class="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition">{{ $item->equipment->nama_peralatan }}</p>
+                                        <p class="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition">{{ $item->item_name }}</p>
                                         <p class="text-xs text-gray-500 mt-1">
                                             {{ $item->quantity }} unit &times; {{ $booking->durasi_hari }} hari
                                         </p>

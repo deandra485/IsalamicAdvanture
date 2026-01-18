@@ -155,7 +155,7 @@
                     <a href="#" class="px-8 py-4 rounded-full bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">
                         Mulai Petualangan
                     </a>
-                    <a href="#" class="px-8 py-4 rounded-full bg-white text-slate-700 border border-slate-200 font-bold text-lg hover:bg-slate-50 transition">
+                    <a href="{{ route('gallery') }}" class="px-8 py-4 rounded-full bg-white text-slate-700 border border-slate-200 font-bold text-lg hover:bg-slate-50 transition">
                         Lihat Galeri
                     </a>
                 </div>

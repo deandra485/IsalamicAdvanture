@@ -3,217 +3,184 @@
 namespace App\Livewire\User;
 
 use App\Models\Booking;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 #[Layout('layouts.app')]
 class BookingHistory extends Component
 {
     use WithPagination;
 
-    public ?User $user = null;
-
     public $statusFilter = '';
-    public $search = '';
-    public $sortBy = 'created_at';
-    public $sortDirection = 'desc';
-    public $perPage = 10;
-
+    public $searchTerm = '';
+    public $showDetailModal = false;
+    public $selectedBooking = null;
     public $showCancelModal = false;
-    public ?Booking $bookingToCancel = null;
     public $cancelReason = '';
 
     protected $queryString = [
-        'statusFilter'   => ['except' => ''],
-        'search'         => ['except' => ''],
-        'sortBy'         => ['except' => 'created_at'],
-        'sortDirection' => ['except' => 'desc'],
+        'statusFilter' => ['except' => ''],
+        'searchTerm' => ['except' => ''],
     ];
 
-    public function mount(): void
-    {
-        $this->user = Auth::user();
-
-        if (!$this->user) {
-            abort(403);
-        }
-    }
-
-    /* =====================
-        FILTER & SORT
-    ====================== */
-
-    public function updatingSearch(): void
+    public function updatingSearchTerm()
     {
         $this->resetPage();
     }
 
-    public function updatingStatusFilter(): void
+    public function updatingStatusFilter()
     {
         $this->resetPage();
     }
 
-    public function sortByField(string $field): void
+    public function render()
+{
+    $bookings = Booking::with([
+            'package.mountain',
+            'items.equipment',
+            'payment'
+        ])
+        ->where('user_id', Auth::id())
+        ->when($this->statusFilter, fn ($q) =>
+            $q->where('status_booking', $this->statusFilter)
+        )
+        ->when($this->searchTerm, function ($q) {
+            $q->where(function ($sub) {
+                $sub->where('kode_booking', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhereHas('package', fn ($p) =>
+                        $p->where('nama_paket', 'like', '%' . $this->searchTerm . '%')
+                    )
+                    ->orWhereHas('items.equipment', fn ($e) =>
+                        $e->where('nama_peralatan', 'like', '%' . $this->searchTerm . '%')
+                    );
+            });
+        })
+        ->latest()
+        ->paginate(10);
+
+    return view('livewire.user.booking-history', [
+        'bookings' => $bookings,
+        'statuses' => [
+            'pending' => 'Pending',
+            'confirmed' => 'Confirmed',
+            'ongoing' => 'Ongoing',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ]
+    ]);
+}
+
+
+    public function viewDetail($bookingId)
     {
-        if ($this->sortBy === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortBy = $field;
-            $this->sortDirection = 'asc';
-        }
+        $this->selectedBooking = Booking::with([
+            'package.mountain',
+            'package.equipment',
+            'Items.equipment.primaryImage',
+            'payment'
+        ])->findOrFail($bookingId);
+        
+        $this->showDetailModal = true;
     }
 
-    public function clearFilters(): void
+    public function closeDetailModal()
     {
-        $this->reset([
-            'search',
-            'statusFilter',
-            'sortBy',
-            'sortDirection',
-        ]);
-
-        $this->resetPage();
+        $this->showDetailModal = false;
+        $this->selectedBooking = null;
     }
 
-    /* =====================
-        CANCEL BOOKING
-    ====================== */
-
-    public function openCancelModal(int $bookingId): void
+    public function openCancelModal($bookingId)
     {
-        $booking = Booking::with('items.equipment')->findOrFail($bookingId);
-
-        if ($booking->user_id !== $this->user->id) {
-            session()->flash('error', 'Akses tidak valid.');
+        $booking = Booking::findOrFail($bookingId);
+        
+        if (!in_array($booking->status_booking, ['pending', 'confirmed'])) {
+            session()->flash('error', 'Booking tidak dapat dibatalkan.');
             return;
         }
 
-        if (!$booking->canBeCancelled()) {
-            session()->flash('error', 'Booking ini tidak dapat dibatalkan.');
-            return;
-        }
-
-        $this->bookingToCancel = $booking;
-        $this->cancelReason = '';
+        $this->selectedBooking = $booking;
         $this->showCancelModal = true;
     }
 
-    public function closeCancelModal(): void
-    {
-        $this->reset([
-            'showCancelModal',
-            'bookingToCancel',
-            'cancelReason',
-        ]);
-    }
-
-    public function cancelBooking(): void
+    public function cancelBooking()
     {
         $this->validate([
-            'cancelReason' => 'required|min:10|max:500',
+            'cancelReason' => 'required|min:10|max:500'
+        ], [
+            'cancelReason.required' => 'Alasan pembatalan harus diisi.',
+            'cancelReason.min' => 'Alasan pembatalan minimal 10 karakter.',
+            'cancelReason.max' => 'Alasan pembatalan maksimal 500 karakter.'
         ]);
 
-        if (
-            !$this->bookingToCancel ||
-            $this->bookingToCancel->user_id !== $this->user->id
-        ) {
-            session()->flash('error', 'Booking tidak valid.');
-            return;
-        }
+        if ($this->selectedBooking) {
+            // Update booking status
+            $this->selectedBooking->update([
+                'status_booking' => 'cancelled',
+                'catatan' => 'Dibatalkan oleh user: ' . $this->cancelReason
+            ]);
 
-        if (!$this->bookingToCancel->canBeCancelled()) {
-            session()->flash('error', 'Booking ini tidak dapat dibatalkan.');
-            return;
-        }
-
-        // Update status booking
-        $this->bookingToCancel->update([
-            'status_booking'   => 'cancelled',
-            'catatan_customer' => $this->cancelReason,
-        ]);
-
-        // Kembalikan stok equipment
-        foreach ($this->bookingToCancel->items as $item) {
-            if ($item->equipment) {
-                $item->equipment->increment('stock', $item->quantity);
+            // Update payment status if exists
+            if ($this->selectedBooking->payment) {
+                $this->selectedBooking->payment->update([
+                    'status_pembayaran' => 'cancelled'
+                ]);
             }
-        }
 
-        session()->flash('success', 'Booking berhasil dibatalkan.');
-        $this->closeCancelModal();
+            // Return stock for equipment bookings
+            foreach ($this->selectedBooking->bookingItems as $item) {
+                $equipment = $item->equipment;
+                $equipment->increment('stok_tersedia', $item->quantity);
+            }
+
+            session()->flash('success', 'Booking berhasil dibatalkan.');
+            
+            $this->showCancelModal = false;
+            $this->selectedBooking = null;
+            $this->cancelReason = '';
+        }
     }
 
-    /* =====================
-        INVOICE PDF
-    ====================== */
+    public function closeCancelModal()
+    {
+        $this->showCancelModal = false;
+        $this->selectedBooking = null;
+        $this->cancelReason = '';
+    }
 
-    public function downloadInvoice(int $bookingId)
+    public function downloadInvoice($bookingId)
     {
         $booking = Booking::with([
             'user',
             'package.mountain',
-            'items.equipment',
-            'payment',
+            'Items.equipment',
+            'payment'
         ])->findOrFail($bookingId);
 
-        if ($booking->user_id !== $this->user->id) {
-            session()->flash('error', 'Anda tidak memiliki akses ke invoice ini.');
-            return;
+        // Check if booking belongs to current user
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
         }
 
         $pdf = Pdf::loadView('pdf.invoice', [
-            'booking' => $booking,
+            'booking' => $booking
         ]);
 
-        return response()->streamDownload(
-            fn () => print($pdf->output()),
-            'invoice-' . $booking->id . '.pdf'
-        );
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'invoice-' . $booking->kode_booking . '.pdf');
     }
 
-    /* =====================
-        RENDER
-    ====================== */
-
-    public function render()
+    public function getStatusBadgeClass($status)
     {
-        $query = Booking::with([
-            'package.mountain',
-            'items',
-        ])->where('user_id', $this->user->id);
-
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('id', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('package', fn ($q) =>
-                      $q->where('name', 'like', '%' . $this->search . '%')
-                  )
-                  ->orWhereHas('package.mountain', fn ($q) =>
-                      $q->where('name', 'like', '%' . $this->search . '%')
-                  );
-            });
-        }
-
-        if ($this->statusFilter) {
-            $query->where('status_booking', $this->statusFilter);
-        }
-
-        $bookings = $query
-            ->orderBy($this->sortBy, $this->sortDirection)
-            ->paginate($this->perPage);
-
-        $statusCounts = Booking::where('user_id', $this->user->id)
-            ->selectRaw('status_booking, COUNT(*) as total')
-            ->groupBy('status_booking')
-            ->pluck('total', 'status_booking');
-
-        return view('livewire.user.booking-history', [
-            'bookings'     => $bookings,
-            'statusCounts' => $statusCounts,
-        ]);
+        return match ($status) {
+            'pending' => 'bg-yellow-100 text-yellow-800',
+            'confirmed' => 'bg-blue-100 text-blue-800',
+            'ongoing' => 'bg-purple-100 text-purple-800',
+            'completed' => 'bg-green-100 text-green-800',
+            'cancelled' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800',
+        };
     }
 }

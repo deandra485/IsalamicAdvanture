@@ -4,9 +4,6 @@
             
             <div class="text-left">
                 <a href="/" class="flex items-center gap-2 text-emerald-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
-                      <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.75 3c1.99 0 3.751 1.08 4.75 2.735A5.5 5.5 0 0117.25 3c3.036 0 5.5 2.322 5.5 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.47 0l-.003-.001z" />
-                    </svg>
                     <h1 class="text-2xl font-bold">IslamicAdvanture</h1>
                 </a>
                 <h2 class="mt-6 text-3xl font-extrabold text-gray-900 tracking-tight">

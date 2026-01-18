@@ -1,192 +1,197 @@
-<div class="bg-gray-50 min-h-screen py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="container mx-auto px-4 py-12 max-w-6xl font-sans">
+    
+    <div class="mb-10">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6">Keranjang Belanja</h1>
         
-        <div class="flex items-center justify-between mb-8">
-            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Keranjang Belanja</h1>
-            <span class="bg-emerald-100 text-emerald-800 text-sm font-semibold px-4 py-1.5 rounded-full">
-                {{ count($cart) }} Item
-            </span>
-        </div>
-
-        @if(session()->has('success'))
-            <div x-data="{ show: true }" x-show="show" class="mb-8 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between shadow-sm">
-                <div class="flex items-center text-emerald-700">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="font-medium">{{ session('success') }}</span>
-                </div>
-                <button @click="show = false" class="text-emerald-400 hover:text-emerald-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+        <div class="flex items-center w-full max-w-2xl mx-auto mb-8">
+            <div class="flex items-center text-blue-600 relative">
+                <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 border-blue-600 bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
+                <div class="absolute top-0 -ml-10 text-center mt-12 w-32 text-xs font-medium uppercase text-blue-600">Keranjang</div>
             </div>
-        @endif
+            <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-200 mx-4"></div>
+            <div class="flex items-center text-gray-400 relative">
+                <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 border-gray-200 bg-white flex items-center justify-center font-bold">2</div>
+                <div class="absolute top-0 -ml-10 text-center mt-12 w-32 text-xs font-medium uppercase text-gray-400">Checkout</div>
+            </div>
+            <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-200 mx-4"></div>
+            <div class="flex items-center text-gray-400 relative">
+                <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 border-gray-200 bg-white flex items-center justify-center font-bold">3</div>
+                <div class="absolute top-0 -ml-10 text-center mt-12 w-32 text-xs font-medium uppercase text-gray-400">Selesai</div>
+            </div>
+        </div>
+    </div>
 
-        @if(count($cart) > 0)
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
-                <div class="lg:col-span-8 space-y-4">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <ul class="divide-y divide-gray-100">
-                            @foreach($cart as $key => $item)
-                                <li class="p-6 transition-colors hover:bg-gray-50/50" wire:key="cart-{{ $key }}">
-                                    <div class="flex flex-col sm:flex-row gap-6">
-                                        
-                                        <div class="flex-shrink-0 relative group">
-                                            <div class="w-full sm:w-32 h-32 rounded-xl overflow-hidden bg-gray-100 border border-gray-100">
-                                                @if(isset($item['equipment']['primary_image']))
-                                                    <img src="{{ Storage::url($item['equipment']['primary_image']['image_url']) }}" 
-                                                         alt="{{ $item['equipment']['nama_peralatan'] }}"
-                                                         class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105">
-                                                @else
-                                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                    </div>
-                                                @endif
+    @if(session()->has('success'))
+        <div class="flex items-center p-4 mb-6 text-sm text-green-800 border border-green-300 rounded-xl bg-green-50 shadow-sm" role="alert">
+            <svg class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+            <span class="font-medium">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if(count($cart) > 0)
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+            
+            <div class="lg:w-2/3 space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 space-y-8">
+                        @foreach($cart as $key => $item)
+                            <div class="flex flex-col sm:flex-row gap-6 {{ !$loop->last ? 'border-b border-gray-100 pb-8' : '' }}">
+                                
+                                <div class="w-full sm:w-32 h-32 flex-shrink-0 relative group">
+                                    <div class="w-full h-full rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
+                                        @php
+                                            $imagePath = ($item['type'] === 'equipment') 
+                                                ? ($item['equipment']['primary_image'] ?? null) 
+                                                : ($item['package']['image'] ?? null);
+                                            $itemName = ($item['type'] === 'equipment') 
+                                                ? $item['equipment']['nama_peralatan'] 
+                                                : $item['package']['nama_paket'];
+                                        @endphp
+
+                                        @if($imagePath)
+                                            <img src="{{ Storage::url($imagePath) }}" 
+                                                 alt="{{ $itemName }}" 
+                                                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                        @else
+                                            <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                             </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h3 class="text-lg font-bold text-gray-900 leading-tight mb-1">{{ $itemName }}</h3>
+                                                <div class="flex flex-wrap gap-2 mb-3">
+                                                    @if($item['type'] === 'equipment')
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                                                            {{ $item['equipment']['category']['nama_kategori'] ?? 'Equipment' }}
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700">
+                                                            Package
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <button wire:click="removeItem('{{ $key }}')" class="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            </button>
                                         </div>
 
-                                        <div class="flex-1 flex flex-col justify-between">
-                                            <div>
-                                                <div class="flex justify-between items-start">
-                                                    <div>
-                                                        <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">
-                                                            {{ $item['equipment']['category']['nama_kategori'] ?? 'Equipment' }}
-                                                        </p>
-                                                        <h3 class="text-lg font-bold text-gray-900 leading-tight">
-                                                            <a href="#" class="hover:text-emerald-600 transition-colors">
-                                                                {{ $item['equipment']['nama_peralatan'] }}
-                                                            </a>
-                                                        </h3>
-                                                    </div>
-                                                    
-                                                    <button wire:click="removeItem('{{ $key }}')"
-                                                            wire:confirm="Hapus item ini dari keranjang?"
-                                                            class="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-md hover:bg-red-50">
-                                                        <span class="sr-only">Hapus</span>
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                    </button>
+                                        <div class="text-sm text-gray-600 space-y-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                            @if($item['type'] === 'equipment')
+                                                <div class="flex items-center gap-2">
+                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                    <span>{{ \Carbon\Carbon::parse($item['tanggal_mulai'])->format('d M') }} - {{ \Carbon\Carbon::parse($item['tanggal_selesai'])->format('d M Y') }}</span>
+                                                    <span class="text-gray-300">|</span>
+                                                    <span class="font-medium text-gray-800">{{ $item['durasi'] }} Hari</span>
                                                 </div>
+                                                <div class="text-xs text-gray-500 mt-1">
+                                                    @ Rp {{ number_format($item['harga_satuan'], 0, ',', '.') }} / hari
+                                                </div>
+                                            @else
+                                                <div class="text-xs text-gray-500">
+                                                    <span class="font-medium text-gray-900 block mb-1">Paket Termasuk:</span>
+                                                    <div class="flex flex-wrap gap-1">
+                                                        @if(isset($item['package']['items']))
+                                                            @foreach($item['package']['items'] as $packageItem)
+                                                                <span class="bg-white border border-gray-200 px-2 py-0.5 rounded text-[10px] text-gray-600">
+                                                                    {{ $packageItem['equipment']['nama_peralatan'] }} (x{{ $packageItem['quantity'] }})
+                                                                </span>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
 
-                                                <div class="mt-3 flex flex-wrap gap-2">
-                                                    <div class="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 text-xs font-medium">
-                                                        <svg class="w-3.5 h-3.5 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                        {{ \Carbon\Carbon::parse($item['tanggal_mulai'])->format('d M') }} - {{ \Carbon\Carbon::parse($item['tanggal_selesai'])->format('d M Y') }}
-                                                    </div>
-                                                    <div class="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
-                                                        <svg class="w-3.5 h-3.5 mr-1.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                        {{ $item['durasi'] }} Hari
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="flex justify-between items-end mt-4">
+                                        <div class="flex items-center border border-gray-200 rounded-lg bg-white shadow-sm h-9">
+                                            <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] - 1 }})" 
+                                                    class="px-3 text-gray-500 hover:text-blue-600 hover:bg-gray-50 rounded-l-lg h-full transition-colors font-medium">
+                                                -
+                                            </button>
+                                            <span class="px-3 text-sm font-semibold text-gray-900 border-x border-gray-100 min-w-[2.5rem] text-center">
+                                                {{ $item['quantity'] }}
+                                            </span>
+                                            <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] + 1 }})" 
+                                                    class="px-3 text-gray-500 hover:text-blue-600 hover:bg-gray-50 rounded-r-lg h-full transition-colors font-medium">
+                                                +
+                                            </button>
+                                        </div>
 
-                                            <div class="mt-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                                                
-                                                <div class="flex items-center">
-                                                    <label class="sr-only">Jumlah</label>
-                                                    <div class="flex items-center border border-gray-200 rounded-full bg-white shadow-sm">
-                                                        <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] - 1 }})"
-                                                                class="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-l-full transition-colors {{ $item['quantity'] <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                                                {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
-                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 12H4"></path></svg>
-                                                        </button>
-                                                        <span class="w-8 text-center text-sm font-semibold text-gray-900 select-none">{{ $item['quantity'] }}</span>
-                                                        <button wire:click="updateQuantity('{{ $key }}', {{ $item['quantity'] + 1 }})"
-                                                                class="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-r-full transition-colors">
-                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                                                        </button>
-                                                    </div>
-                                                    <span class="ml-3 text-xs text-gray-500">x Rp {{ number_format($item['harga_satuan'], 0, ',', '.') }}</span>
-                                                </div>
-
-                                                <div class="text-right">
-                                                    <p class="text-xs text-gray-500 mb-0.5">Subtotal</p>
-                                                    <p class="text-xl font-bold text-emerald-600">
-                                                        Rp {{ number_format($item['subtotal'], 0, ',', '.') }}
-                                                    </p>
-                                                </div>
+                                        <div class="text-right">
+                                            <div class="text-xs text-gray-500 mb-0.5">Subtotal</div>
+                                            <div class="text-lg font-bold text-blue-600">
+                                                Rp {{ number_format($item['subtotal'], 0, ',', '.') }}
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                        
-                        <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end">
-                             <button wire:click="clearCart" 
-                                    wire:confirm="Kosongkan semua item dari keranjang?"
-                                    class="text-sm text-red-500 hover:text-red-700 font-medium flex items-center transition-colors">
-                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                Kosongkan Keranjang
-                            </button>
-                        </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 
-                <div class="lg:col-span-4 sticky top-6">
-                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                        <h2 class="text-lg font-bold text-gray-900 mb-6 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                            Ringkasan Pesanan
-                        </h2>
+                <div class="flex justify-between items-center pt-2">
+                    <a href="{{ route('equipment.index') }}" class="text-sm font-medium text-gray-500 hover:text-blue-600 flex items-center gap-2 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Lanjut Belanja
+                    </a>
+                    <button wire:click="clearCart" class="text-sm font-medium text-red-500 hover:text-red-700 hover:underline transition-colors">
+                        Kosongkan Keranjang
+                    </button>
+                </div>
+            </div>
 
-                        <div class="space-y-4 text-sm text-gray-600">
-                            <div class="flex justify-between">
-                                <span>Jumlah Item</span>
-                                <span class="font-medium text-gray-900">{{ count($cart) }} jenis</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Total Unit</span>
-                                <span class="font-medium text-gray-900">{{ collect($cart)->sum('quantity') }} unit</span>
-                            </div>
-                            
-                            <div class="border-t border-dashed border-gray-200 my-4"></div>
+            <div class="lg:w-1/3">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 lg:p-8 sticky top-8">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Ringkasan Pesanan</h2>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between text-gray-600 text-sm">
+                            <span>Total Item</span>
+                            <span class="font-medium text-gray-900">{{ count($cart) }} item</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600 text-sm">
+                            <span>Total Barang (Qty)</span>
+                            <span class="font-medium text-gray-900">{{ collect($cart)->sum('quantity') }} unit</span>
+                        </div>
+                        <div class="pt-4 mt-4 border-t border-gray-100 flex justify-between items-end">
+                            <span class="text-base font-semibold text-gray-900">Total Biaya</span>
+                            <span class="text-2xl font-bold text-blue-600">
+                                Rp {{ number_format($this->getTotal(), 0, ',', '.') }}
+                            </span>
+                        </div>
+                    </div>
 
-                            <div class="flex justify-between items-center">
-                                <span class="text-base font-semibold text-gray-900">Total Harga</span>
-                                <span class="text-2xl font-bold text-emerald-600">
-                                    Rp {{ number_format($this->getTotal(), 0, ',', '.') }}
-                                </span>
-                            </div>
-                        </div>
+                    <a href="{{ route('booking.checkout') }}" class="block w-full bg-blue-600 text-white text-center py-4 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 transform hover:-translate-y-0.5 transition-all duration-200">
+                        Lanjut ke Checkout
+                    </a>
 
-                        <div class="mt-8 space-y-3">
-                            <a href="{{ route('user.checkout') }}" class="w-full flex justify-center items-center px-6 py-3.5 border border-transparent text-sm font-bold rounded-xl text-white bg-gray-900 hover:bg-emerald-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                                Lanjut ke Checkout
-                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                            </a>
-                            
-                            <a href="{{ route('equipment.index') }}" class="w-full flex justify-center items-center px-6 py-3.5 border border-gray-200 text-sm font-semibold rounded-xl text-gray-600 bg-white hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                                Lanjut Belanja
-                            </a>
-                        </div>
-                        
-                        <div class="mt-6 pt-6 border-t border-gray-100 grid grid-cols-2 gap-2 text-xs text-gray-400 text-center">
-                            <div class="flex flex-col items-center">
-                                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                <span>Pembayaran Aman</span>
-                            </div>
-                            <div class="flex flex-col items-center">
-                                <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <span>Jaminan Alat</span>
-                            </div>
-                        </div>
+                    <div class="mt-6 flex items-center justify-center gap-2 text-xs text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <span>Pembayaran Aman & Terenkripsi</span>
                     </div>
                 </div>
             </div>
-        @else
-            <div class="max-w-md mx-auto text-center py-20">
-                <div class="bg-white rounded-full h-40 w-40 flex items-center justify-center mx-auto mb-6 shadow-sm border border-emerald-100 relative">
-                    <div class="absolute inset-0 rounded-full animate-pulse bg-emerald-50 opacity-50"></div>
-                    <svg class="w-20 h-20 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">Keranjangmu Kosong</h2>
-                <p class="text-gray-500 mb-8 leading-relaxed">Sepertinya kamu belum memilih peralatan petualanganmu. Yuk, cari perlengkapan terbaik sekarang!</p>
-                <a href="{{ route('equipment.index') }}" class="inline-flex items-center px-8 py-3.5 border border-transparent text-base font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 transition-all duration-300 shadow-lg hover:shadow-emerald-500/40 transform hover:-translate-y-1">
-                    Mulai Belanja
-                    <svg class="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                </a>
+        </div>
+    @else
+        <div class="flex flex-col items-center justify-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
+            <div class="w-48 h-48 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                <svg class="w-24 h-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
             </div>
-        @endif
-    </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Keranjang Anda Kosong</h2>
+            <p class="text-gray-500 mb-8 max-w-sm text-center">Sepertinya Anda belum menambahkan peralatan apa pun. Mari temukan gear terbaik untuk kebutuhan Anda.</p>
+            <a href="{{ route('equipment.index') }}" class="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+                <span>Mulai Belanja</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+        </div>
+    @endif
 </div>

@@ -14,6 +14,8 @@ class Package extends Model
         'deskripsi',
         'harga_paket',
         'durasi_hari',
+        'tanggal_mulai',
+        'tanggal_selesai',
         'max_peserta',
         'include_guide',
         'is_active',

@@ -7,25 +7,22 @@
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
             
+            {{-- LOGO SECTION --}}
             <div class="flex-shrink-0 flex items-center">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <div class="relative w-11 h-11">
-                        <div class="absolute inset-0 bg-primary-600 rounded-2xl rotate-6 opacity-20 group-hover:rotate-12 transition-transform duration-300"></div>
-                        <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                            </svg>
-                        </div>
-                    </div>
+                <a href="{{ route('home') }}" class="flex items-center gap-2 transition-opacity hover:opacity-80">
+                    <img src="{{ asset('image/logo.jpeg') }}" 
+                        alt="Islamic Adventure Logo" 
+                        class="h-11 w-auto rounded-lg object-cover shadow-sm group-hover:shadow-md transition-all duration-300">
+                        
                     <div class="flex flex-col">
-                        <span class="text-xl font-bold tracking-tight text-gray-900 group-hover:text-primary-600 transition-colors">
+                        <span class="text-xl font-bold tracking-tight text-gray-900">
                             Islamic<span class="text-primary-600">Adventure</span>
                         </span>
-                        <span class="text-[10px] uppercase tracking-wider font-semibold text-gray-400">Gear Rental</span>
-                    </div>
+                    </div> 
                 </a>
             </div>
 
+            {{-- DESKTOP MENU LINKS --}}
             <div class="hidden md:flex items-center gap-1 p-1 bg-gray-50 rounded-full border border-gray-100">
                 <a href="{{ route('home') }}" 
                    class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 {{ request()->routeIs('home') ? 'bg-white text-primary-600 shadow-sm ring-1 ring-gray-200' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-200/50' }}">
@@ -34,6 +31,10 @@
                 <a href="{{ route('mountains.index') }}" 
                    class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 {{ request()->routeIs('mountains.*') ? 'bg-white text-primary-600 shadow-sm ring-1 ring-gray-200' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-200/50' }}">
                     Gunung
+                </a>
+                <a href="{{ route('packages.index') }}" 
+                   class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 {{ request()->routeIs('packages.*') ? 'bg-white text-primary-600 shadow-sm ring-1 ring-gray-200' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-200/50' }}">
+                    Paket
                 </a>
                 <a href="{{ route('equipment.index') }}" 
                    class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 {{ request()->routeIs('equipment.*') ? 'bg-white text-primary-600 shadow-sm ring-1 ring-gray-200' : 'text-gray-600 hover:text-primary-600 hover:bg-gray-200/50' }}">
@@ -47,7 +48,20 @@
                 @endauth
             </div>
 
-            <div class="flex items-center gap-4">
+            {{-- RIGHT SIDE ACTIONS --}}
+            <div class="flex items-center gap-3">
+                
+                {{-- [BARU] TOMBOL KERANJANG (DESKTOP) --}}
+                <a href="{{ route('booking.cart') }}" 
+                   class="hidden md:flex relative p-2 text-gray-600 hover:text-primary-600 hover:bg-gray-100 rounded-full transition-all duration-300 group {{ request()->routeIs('booking.cart') ? 'text-primary-600 bg-primary-50' : '' }}"
+                   title="Keranjang Belanja">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    {{-- Opsi: Badge Indikator jika ada item (Bisa diaktifkan jika ada variabel count) --}}
+                    {{-- <span class="absolute top-1 right-1 h-2.5 w-2.5 bg-red-500 rounded-full border border-white"></span> --}}
+                </a>
+
                 @guest
                     <a href="{{ route('login') }}" 
                        class="hidden md:inline-flex items-center px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors">
@@ -112,6 +126,7 @@
                     </div>
                 @endguest
 
+                {{-- MOBILE MENU BUTTON --}}
                 <button @click="mobileMenuOpen = !mobileMenuOpen" 
                         class="md:hidden p-2 rounded-xl text-gray-600 hover:bg-gray-100 focus:outline-none transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,6 +137,7 @@
             </div>
         </div>
 
+        {{-- MOBILE MENU DROPDOWN --}}
         <div x-show="mobileMenuOpen" 
              style="display: none;"
              x-transition:enter="transition ease-out duration-300"
@@ -139,9 +155,20 @@
                 <a href="{{ route('mountains.index') }}" class="block px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('mountains.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50' }}">
                     Gunung
                 </a>
+
+                <a href="{{ route('packages.index') }}" class="block px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('packages.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                    Paket
+                </a>
                 <a href="{{ route('equipment.index') }}" class="block px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('equipment.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50' }}">
                     Peralatan
                 </a>
+
+                {{-- [BARU] MENU KERANJANG (MOBILE) --}}
+                <a href="{{ route('booking.cart') }}" class="flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors {{ request()->routeIs('booking.cart') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                    <span>Keranjang</span>
+                    <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </a>
+
                 @auth
                 <div class="border-t border-gray-100 my-2 pt-2"></div>
                 <a href="{{ route('user.bookings.history') }}" class="block px-4 py-3 rounded-xl text-base font-medium text-gray-600 hover:bg-gray-50">

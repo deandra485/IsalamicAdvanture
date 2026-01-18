@@ -92,9 +92,79 @@
                     </div>
                 </div>
 
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Tentang Paket</h3>
-                <div class="prose prose-emerald max-w-none text-gray-600 leading-relaxed bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                    {{ $package->deskripsi }}
+                <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                    <span class="bg-orange-100 text-orange-600 p-2 rounded-lg mr-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </span>
+                    Tentang Paket
+                </h3>
+                
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <div>
+                            <h4 class="font-bold text-emerald-700 mb-4 flex items-center text-sm uppercase tracking-wider border-b border-emerald-100 pb-2">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Fasilitas (Terima Beres)
+                            </h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Transportasi Elf/Bus AC (PP)</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Driver, BBM, Tol & Parkir</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Simaksi Pendakian & E-Ticket</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Rumah Singgah / Homestay</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Porter Tenda & Logistik Kelompok</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Pemandu (Guide) & Sweeper</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Makan 2x Selama Pendakian</span>
+                                </li>
+                                <li class="flex items-start text-gray-600 text-sm">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>Dokumentasi Foto/Video</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-red-600 mb-4 flex items-center text-sm uppercase tracking-wider border-b border-red-100 pb-2">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Exclude (Tidak Termasuk)
+                            </h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start text-gray-500 text-sm">
+                                    <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Perlengkapan Pribadi (Tas, Sepatu, Jaket)</span>
+                                </li>
+                                <li class="flex items-start text-gray-500 text-sm">
+                                    <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Sleeping Bag (Bisa sewa terpisah)</span>
+                                </li>
+                                <li class="flex items-start text-gray-500 text-sm">
+                                    <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>Cemilan Pribadi</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
@@ -103,7 +173,7 @@
                     <span class="bg-emerald-100 text-emerald-600 p-2 rounded-lg mr-3">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
                     </span>
-                    Fasilitas & Peralatan
+                    Detail Alat Camping
                 </h3>
                 
                 @if($package->equipment->count() > 0)
@@ -118,12 +188,12 @@
                                 <div class="flex-1">
                                     <div class="flex justify-between items-start">
                                         <h4 class="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">{{ $equipment->name }}</h4>
-                                        <span class="text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">x1</span>
+                                        <span class="text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">Included</span>
                                     </div>
                                     <p class="text-sm text-gray-500 mt-1">{{ $equipment->description }}</p>
                                     <div class="mt-2 text-xs flex items-center">
                                         <span class="w-2 h-2 rounded-full {{ $equipment->stock > 5 ? 'bg-green-500' : 'bg-orange-500' }} mr-2"></span>
-                                        <span class="text-gray-400">Tersedia</span>
+                                        <span class="text-gray-400">Siap Pakai</span>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +201,7 @@
                     </div>
                 @else
                     <div class="p-4 bg-gray-50 rounded-xl text-gray-500 text-center italic">
-                        Tidak ada detail peralatan khusus untuk paket ini.
+                        Detail peralatan standar sudah termasuk dalam paket.
                     </div>
                 @endif
             </div>
@@ -150,6 +220,35 @@
                     </div>
 
                     <div class="p-6 space-y-6">
+                        
+                        {{-- === BAGIAN BARU: INPUT TANGGAL MULAI === --}}
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Pilih Tanggal Mulai</label>
+                            <input 
+                                type="date" 
+                                wire:model.live="tanggalMulai"
+                                min="{{ $minDate ?? date('Y-m-d') }}"
+                                class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block p-3"
+                            >
+                            @error('tanggalMulai') 
+                                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                            @enderror
+
+                            {{-- Preview Tanggal Selesai (Otomatis muncul kalau tanggalMulai diisi) --}}
+                            @if($tanggalSelesai)
+                                <div class="mt-3 p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center justify-between">
+                                    <div class="text-xs text-emerald-600">
+                                        <span class="block font-semibold">Selesai Trip:</span>
+                                        {{ \Carbon\Carbon::parse($tanggalSelesai)->isoFormat('dddd, D MMMM Y') }}
+                                    </div>
+                                    <span class="bg-white text-emerald-700 text-xs font-bold px-2 py-1 rounded shadow-sm">
+                                        {{ $package->durasi_hari }} Hari
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
+                        {{-- === AKHIR BAGIAN BARU === --}}
+
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-3">Jumlah Peserta</label>
                             <div class="flex items-center justify-between bg-gray-50 rounded-2xl p-2 border border-gray-200">
@@ -182,10 +281,12 @@
                         <div class="space-y-3">
                             <button 
                                 wire:click="addToCart"
-                                class="w-full py-4 px-6 bg-gray-900 text-white rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 font-bold text-lg flex justify-center items-center"
+                                wire:loading.attr="disabled"
+                                class="w-full py-4 px-6 bg-gray-900 text-white rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 font-bold text-lg flex justify-center items-center disabled:opacity-75 disabled:cursor-not-allowed"
                             >
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                Tambah ke Keranjang
+                                <svg wire:loading.remove class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                <span wire:loading.remove>Booking Sekarang</span>
+                                <span wire:loading>Memproses...</span>
                             </button>
                             
                             <a 

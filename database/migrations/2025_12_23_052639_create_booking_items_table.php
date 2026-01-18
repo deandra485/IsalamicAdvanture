@@ -12,13 +12,36 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('booking_items', function (Blueprint $table) {
-           $table->foreignId('booking_id')->constrained()->onDelete('cascade');
-            $table->foreignId('equipment_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(1);
-            $table->decimal('harga_satuan', 10, 2);
-            $table->decimal('subtotal', 10, 2);
-            $table->timestamps();
-        });
+    $table->id(); // ✅ WAJIB
+
+    $table->foreignId('booking_id')
+        ->constrained()
+        ->onDelete('cascade');
+
+    // ✅ HARUS nullable
+    $table->foreignId('equipment_id')
+        ->nullable()
+        ->constrained()
+        ->onDelete('cascade');
+
+    // ✅ package juga nullable
+    $table->foreignId('package_id')
+        ->nullable()
+        ->constrained()
+        ->onDelete('cascade');
+
+    $table->string('item_type'); // equipment | package
+
+    $table->integer('quantity')->default(1);
+    $table->decimal('harga_satuan', 10, 2);
+    $table->decimal('subtotal', 10, 2);
+
+    $table->date('tanggal_mulai')->nullable();
+    $table->date('tanggal_selesai')->nullable();
+
+    $table->timestamps();
+});
+
     }
 
     /**

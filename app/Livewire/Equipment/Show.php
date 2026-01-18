@@ -85,26 +85,35 @@ class Show extends Component
         $cartKey = $this->equipment->id . '-' . $this->tanggalMulai . '-' . $this->tanggalSelesai;
         
         if (isset($cart[$cartKey])) {
-            $cart[$cartKey]['quantity'] += $this->quantity;
-        } else {
-            $cart[$cartKey] = [
-                'equipment_id' => $this->equipment->id,
-                'equipment' => $this->equipment->toArray(),
-                'quantity' => $this->quantity,
-                'tanggal_mulai' => $this->tanggalMulai,
-                'tanggal_selesai' => $this->tanggalSelesai,
-                'durasi' => $this->durasi,
-                'harga_satuan' => $this->equipment->harga_sewa_perhari,
-                'subtotal' => $this->totalHarga,
-            ];
-        }
+    $cart[$cartKey]['type'] = 'equipment'; // 🔥 PAKSA ADA
+    $cart[$cartKey]['quantity'] += $this->quantity;
+    $cart[$cartKey]['durasi'] = $this->durasi;
+    $cart[$cartKey]['harga_satuan'] = $this->equipment->harga_sewa_perhari;
+    $cart[$cartKey]['subtotal'] =
+        $cart[$cartKey]['quantity']
+        * $cart[$cartKey]['durasi']
+        * $cart[$cartKey]['harga_satuan'];
+} else {
+    $cart[$cartKey] = [
+        'type' => 'equipment', // 🔥 WAJIB
+        'equipment_id' => $this->equipment->id,
+        'equipment' => $this->equipment->toArray(),
+        'quantity' => $this->quantity,
+        'tanggal_mulai' => $this->tanggalMulai,
+        'tanggal_selesai' => $this->tanggalSelesai,
+        'durasi' => $this->durasi,
+        'harga_satuan' => $this->equipment->harga_sewa_perhari,
+        'subtotal' => $this->totalHarga,
+    ];
+}
+
         
         session()->put('cart', $cart);
         
         $this->dispatch('cart-updated');
         session()->flash('success', 'Berhasil ditambahkan ke keranjang!');
         
-        return redirect()->route('user.cart');
+        return redirect()->route('booking.cart');
     }
 
     public function render()

@@ -21,7 +21,7 @@ class Index extends Component
     public $sortBy = 'nama_paket';
     public $sortDirection = 'asc';
     public $perPage = 9;
-    public User $user;
+    public ?User $user = null;
 
 
     protected $queryString = [

@@ -4,6 +4,7 @@ namespace App\Livewire\Payment;
 
 use App\Models\Booking;
 use App\Models\User;
+use App\Models\Payment;
 use App\Notifications\PaymentReceived;
 use App\Traits\HasFileUpload;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +65,7 @@ class Process extends Component
             $booking->payment->status_pembayaran === 'verified'
         ) {
             session()->flash('info', 'Pembayaran sudah diverifikasi');
-            redirect()->route('bookings.history')->send();
+            redirect()->route('user.bookings.history')->send();
         }
 
         $this->booking = $booking->load('payment', 'items.equipment', 'package');
@@ -77,43 +78,54 @@ class Process extends Component
         $this->selectedMethod = $method;
     }
 
-    public function uploadPaymentProof()
-    {
-        $this->validate();
+public function uploadPaymentProof()
+{
+    $this->validate();
 
-        try {
-            $path = $this->uploadImage($this->bukti_pembayaran, 'payments');
+    try {
+        $path = $this->uploadImage($this->bukti_pembayaran, 'payments');
 
-            $this->booking->payment->update([
+        $payment = Payment::updateOrCreate(
+            [
+                'booking_id' => $this->booking->id,
+            ],
+            [
+                'jumlah_bayar' => $this->booking->total_biaya,
+                'metode_pembayaran' => $this->selectedMethod,
+                'status_pembayaran' => Payment::STATUS_PENDING,
+                'tanggal_pembayaran' => now(),
                 'bukti_pembayaran_url' => $path,
                 'catatan' => $this->catatan,
-                'status_pembayaran' => 'pending',
-                'tanggal_pembayaran' => now(),
-            ]);
+            ]
+        );
 
-            $admins = User::where('role', 'admin')->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new PaymentReceived($this->booking));
-            }
-
-            \App\Models\ActivityLog::log(
-                'update',
-                'payments',
-                $this->booking->payment->id,
-                'Customer uploaded payment proof for booking #' . $this->booking->id
-            );
-
-            session()->flash(
-                'success',
-                'Bukti pembayaran berhasil diupload, menunggu verifikasi admin.'
-            );
-
-            return redirect()->route('bookings.history');
-
-        } catch (\Throwable $e) {
-            session()->flash('error', $e->getMessage());
+        // Notifikasi admin
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new PaymentReceived($this->booking));
         }
+
+        // Activity log
+        \App\Models\ActivityLog::log(
+            'update',
+            'payments',
+            $payment->id,
+            'Customer uploaded payment proof for booking #' . $this->booking->id
+        );
+
+        session()->flash(
+            'success',
+            'Bukti pembayaran berhasil diupload, menunggu verifikasi admin.'
+        );
+
+        return redirect()->route('user.bookings.history');
+
+    } catch (\Throwable $e) {
+        report($e);
+        session()->flash('error', 'Terjadi kesalahan saat mengupload bukti pembayaran.');
     }
+}
+
 
     public function render()
     {

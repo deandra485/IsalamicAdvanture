@@ -11,7 +11,9 @@ class CartItem extends Model
 
     protected $fillable = [
         'user_id',
+        'type',       // 'equipment' atau 'package'
         'package_id',
+        'equipment_id',
         'quantity',
     ];
 
@@ -21,9 +23,15 @@ class CartItem extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke Package
+    // Relasi ke Package (Paket Wisata)
     public function package()
     {
         return $this->belongsTo(Package::class);
+    }
+
+    // Relasi ke Equipment (Peralatan)
+    public function equipment()
+    {
+        return $this->belongsTo(Equipment::class);
     }
 }

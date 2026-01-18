@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->decimal('harga_paket', 10, 2);
             $table->integer('durasi_hari');
+            $table->date('tanggal_mulai')->nullable(); 
+        $table->date('tanggal_selesai')->nullable();
             $table->integer('max_peserta');
             $table->boolean('include_guide')->default(false);
             $table->boolean('is_active')->default(true);

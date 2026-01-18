@@ -8,18 +8,31 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('cart_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+    $table->id();
 
-            $table->foreignId('package_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+    $table->foreignId('user_id')
+          ->constrained()
+          ->cascadeOnDelete();
 
-            $table->unsignedInteger('quantity')->default(1);
-            $table->timestamps();
-        });
+    $table->enum('type', ['equipment', 'package']);
+
+    // PACKAGE (boleh null)
+    $table->foreignId('package_id')
+          ->nullable()
+          ->constrained()
+          ->nullOnDelete();
+
+    // EQUIPMENT (boleh null)
+    $table->foreignId('equipment_id')
+          ->nullable()
+          ->constrained()
+          ->nullOnDelete();
+
+    $table->unsignedInteger('quantity')->default(1);
+
+    $table->timestamps();
+});
+
     }
 
     public function down(): void
