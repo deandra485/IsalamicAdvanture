@@ -21,43 +21,43 @@ class Gallery extends Component
         $this->images = [
             [
                 'id' => 1,
-                'url' => 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-                'thumb' => 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+                'url' => '/image/galeri/galeri5.jpg',
+                'thumb' => '/image/galeri/galeri5.jpg',
                 'title' => 'Mountain Landscape',
                 'description' => 'Beautiful mountain view'
             ],
             [
                 'id' => 2,
-                'url' => 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
-                'thumb' => 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400',
+                'url' => '/image/galeri/galeri7.jpg',
+                'thumb' => '/image/galeri/galeri7.jpg',
                 'title' => 'Nature Trail',
                 'description' => 'Peaceful nature walk'
             ],
             [
                 'id' => 3,
-                'url' => 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800',
-                'thumb' => 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400',
+                'url' => '/image/galeri/galeri8.jpg',
+                'thumb' => '/image/galeri/galeri8.jpg',
                 'title' => 'Sunset View',
                 'description' => 'Amazing sunset colors'
             ],
             [
                 'id' => 4,
-                'url' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
-                'thumb' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400',
+                'url' => '/image/galeri/islamic.jpg',
+                'thumb' => '/image/galeri/islamic.jpg',
                 'title' => 'Forest Path',
                 'description' => 'Green forest pathway'
             ],
             [
                 'id' => 5,
-                'url' => 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=800',
-                'thumb' => 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400',
+                'url' => '/image/galeri/galeri6.jpg',
+                'thumb' => '/image/galeri/galeri6.jpg',
                 'title' => 'Lake Reflection',
                 'description' => 'Crystal clear lake'
             ],
             [
                 'id' => 6,
-                'url' => 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800',
-                'thumb' => 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=400',
+                'url' => '/image/galeri/galeri9.jpg',
+                'thumb' => '/image/galeri/galeri9.jpg',
                 'title' => 'Ocean Waves',
                 'description' => 'Peaceful ocean scene'
             ],

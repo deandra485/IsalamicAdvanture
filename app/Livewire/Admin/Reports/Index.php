@@ -4,10 +4,12 @@ namespace App\Livewire\Admin\Reports;
 
 use App\Models\Booking;
 use App\Models\User;
+use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
 
 #[Layout('layouts.admin')]
 class Index extends Component
@@ -15,6 +17,8 @@ class Index extends Component
     public $startDate;
     public $endDate;
     public $period = 'daily'; // daily | monthly
+    public $selectedMetric = 'revenue'; // revenue | bookings | customers
+    public $refreshInterval = null; // Auto refresh feature
 
     public function mount()
     {
@@ -23,15 +27,68 @@ class Index extends Component
         $this->endDate = Carbon::now()->format('Y-m-d');
     }
 
+    // Computed properties untuk performa lebih baik
+    #[Computed]
+    public function totalRevenue()
+    {
+        return $this->getBaseQuery()->sum('total_biaya');
+    }
+
+    #[Computed]
+    public function totalBookings()
+    {
+        return $this->getBaseQuery()->count();
+    }
+
+    #[Computed]
+    public function newCustomers()
+    {
+        return User::where('role', 'customer')
+            ->whereBetween('created_at', [
+                Carbon::parse($this->startDate)->startOfDay(), 
+                Carbon::parse($this->endDate)->endOfDay()
+            ])
+            ->count();
+    }
+
+    #[Computed]
+    public function averageBookingValue()
+    {
+        $total = $this->totalRevenue;
+        $count = $this->totalBookings;
+        return $count > 0 ? $total / $count : 0;
+    }
+
+    #[Computed]
+    public function completionRate()
+    {
+        $total = Booking::whereBetween('tanggal_mulai', [$this->startDate, $this->endDate])->count();
+        $completed = Booking::where('status_booking', 'completed')
+            ->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate])
+            ->count();
+        
+        return $total > 0 ? round(($completed / $total) * 100, 1) : 0;
+    }
+
+    #[Computed]
+    public function pendingPayments()
+    {
+        return Payment::where('status_pembayaran', 'pending')
+            ->whereHas('booking', function($q) {
+                $q->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate]);
+            })
+            ->sum('jumlah_bayar');
+    }
+
     public function render()
     {
         return view('livewire.admin.reports.index', [
-            'totalRevenue'  => $this->getTotalRevenue(),
-            'totalBookings' => $this->getTotalBookings(),
-            'newCustomers'  => $this->getNewCustomersCount(),
-            'revenueChart'  => $this->getRevenueData(), // Data untuk Grafik
+            'revenueChart'  => $this->getRevenueData(),
             'topMountains'  => $this->getTopMountains(),
             'topEquipment'  => $this->getTopEquipment(),
+            'bookingsByStatus' => $this->getBookingsByStatus(),
+            'paymentMethods' => $this->getPaymentMethodsBreakdown(),
+            'revenueComparison' => $this->getRevenueComparison(),
         ]);
     }
 
@@ -43,58 +100,34 @@ class Index extends Component
             ->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate]);
     }
 
-    public function getTotalRevenue()
-    {
-        return $this->getBaseQuery()->sum('total_biaya');
-    }
-
-    public function getTotalBookings()
-    {
-        return $this->getBaseQuery()->count();
-    }
-
-    public function getNewCustomersCount()
-    {
-        return User::where('role', 'customer')
-            ->whereBetween('created_at', [
-                Carbon::parse($this->startDate)->startOfDay(), 
-                Carbon::parse($this->endDate)->endOfDay()
-            ])
-            ->count();
-    }
-
     public function getRevenueData()
     {
-        // Tentukan format grouping MySQL berdasarkan pilihan user
         $format = $this->period === 'monthly' ? '%Y-%m' : '%Y-%m-%d';
         
-        // Query database
         $data = Booking::where('status_booking', 'confirmed')
             ->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate])
             ->select(
                 DB::raw("DATE_FORMAT(tanggal_mulai, '$format') as date"), 
-                DB::raw('sum(total_biaya) as total'), 
-                DB::raw('count(*) as count')
+                DB::raw('SUM(total_biaya) as total'), 
+                DB::raw('COUNT(*) as count'),
+                DB::raw('AVG(total_biaya) as average')
             )
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
 
-        // MAPPING PENTING:
-        // Ubah hasil query menjadi format yang ramah JavaScript (Chart)
-        // Pastikan 'total' di-cast menjadi (int) agar tidak dianggap string oleh JS
         return $data->map(function ($item) {
             return [
                 'date'  => $item->date,
                 'total' => (int) $item->total,
                 'count' => (int) $item->count,
+                'average' => (int) $item->average,
             ];
         });
     }
 
     public function getTopMountains()
     {
-        // Menggunakan Eager Loading untuk performa
         $bookings = Booking::with('package.mountain')
             ->where('status_booking', 'confirmed')
             ->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate])
@@ -102,23 +135,26 @@ class Index extends Component
 
         $stats = [];
         foreach ($bookings as $booking) {
-            // Null coalescing operator menjaga jika paket/gunung terhapus
-            $namaGunung = $booking->package->mountain->nama_gunung ?? 'Unknown/Deleted';
+            $namaGunung = $booking->package?->mountain?->nama_gunung ?? 'Unknown';
             
             if (!isset($stats[$namaGunung])) {
-                $stats[$namaGunung] = 0;
+                $stats[$namaGunung] = [
+                    'count' => 0,
+                    'revenue' => 0
+                ];
             }
-            $stats[$namaGunung]++;
+            $stats[$namaGunung]['count']++;
+            $stats[$namaGunung]['revenue'] += $booking->total_biaya;
         }
 
-        arsort($stats); // Urutkan dari terbesar
+        // Sort by count
+        uasort($stats, fn($a, $b) => $b['count'] <=> $a['count']);
         
-        return array_slice($stats, 0, 5); // Ambil Top 5
+        return array_slice($stats, 0, 5);
     }
 
     public function getTopEquipment()
     {
-        // Mengambil data equipment dari relasi many-to-many via package
         $bookings = Booking::with(['package.equipment'])
             ->where('status_booking', 'confirmed')
             ->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate])
@@ -129,13 +165,13 @@ class Index extends Component
         foreach ($bookings as $booking) {
             if ($booking->package && $booking->package->equipment) {
                 foreach ($booking->package->equipment as $eq) {
-                    // Ambil quantity dari pivot table (package_equipment)
                     $qtyInPackage = $eq->pivot->quantity ?? 1;
                     
                     if (!isset($equipmentStats[$eq->id])) {
                         $equipmentStats[$eq->id] = [
-                            'name' => $eq->nama_barang,
-                            'total_usage' => 0
+                            'name' => $eq->nama_peralatan,
+                            'total_usage' => 0,
+                            'category' => $eq->category->nama_kategori ?? 'N/A'
                         ];
                     }
                     $equipmentStats[$eq->id]['total_usage'] += $qtyInPackage;
@@ -143,11 +179,83 @@ class Index extends Component
             }
         }
 
-        // Return collection agar mudah di-loop di blade
         return collect($equipmentStats)->sortByDesc('total_usage')->take(5);
     }
 
-    // --- Export Feature (CSV) ---
+    public function getBookingsByStatus()
+    {
+        return Booking::whereBetween('tanggal_mulai', [$this->startDate, $this->endDate])
+            ->select('status_booking', DB::raw('COUNT(*) as count'))
+            ->groupBy('status_booking')
+            ->get()
+            ->mapWithKeys(fn($item) => [$item->status_booking => $item->count]);
+    }
+
+    public function getPaymentMethodsBreakdown()
+    {
+        return Payment::whereHas('booking', function($q) {
+                $q->whereBetween('tanggal_mulai', [$this->startDate, $this->endDate]);
+            })
+            ->where('status_pembayaran', 'verified')
+            ->select('metode_pembayaran', DB::raw('COUNT(*) as count'), DB::raw('SUM(jumlah_bayar) as total'))
+            ->groupBy('metode_pembayaran')
+            ->get();
+    }
+
+    public function getRevenueComparison()
+    {
+        $currentTotal = $this->totalRevenue;
+        
+        // Get previous period
+        $start = Carbon::parse($this->startDate);
+        $end = Carbon::parse($this->endDate);
+        $diff = $start->diffInDays($end);
+        
+        $previousStart = $start->copy()->subDays($diff + 1);
+        $previousEnd = $start->copy()->subDay();
+        
+        $previousTotal = Booking::where('status_booking', 'confirmed')
+            ->whereBetween('tanggal_mulai', [$previousStart->format('Y-m-d'), $previousEnd->format('Y-m-d')])
+            ->sum('total_biaya');
+        
+        $percentageChange = $previousTotal > 0 
+            ? round((($currentTotal - $previousTotal) / $previousTotal) * 100, 1)
+            : 0;
+        
+        return [
+            'current' => $currentTotal,
+            'previous' => $previousTotal,
+            'change' => $percentageChange,
+            'trend' => $percentageChange >= 0 ? 'up' : 'down'
+        ];
+    }
+
+    // Quick date filters
+    public function setToday()
+    {
+        $this->startDate = Carbon::today()->format('Y-m-d');
+        $this->endDate = Carbon::today()->format('Y-m-d');
+    }
+
+    public function setThisWeek()
+    {
+        $this->startDate = Carbon::now()->startOfWeek()->format('Y-m-d');
+        $this->endDate = Carbon::now()->endOfWeek()->format('Y-m-d');
+    }
+
+    public function setThisMonth()
+    {
+        $this->startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $this->endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
+    }
+
+    public function setLast30Days()
+    {
+        $this->startDate = Carbon::now()->subDays(29)->format('Y-m-d');
+        $this->endDate = Carbon::now()->format('Y-m-d');
+    }
+
+    // Export Feature
     public function exportCsv()
     {
         $data = $this->getRevenueData();
@@ -163,12 +271,13 @@ class Index extends Component
 
         $callback = function() use ($data) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['Date', 'Total Bookings', 'Revenue (Rp)']);
+            fputcsv($file, ['Date', 'Total Bookings', 'Average Value', 'Revenue (Rp)']);
 
             foreach ($data as $row) {
                 fputcsv($file, [
-                    $row['date'],   // Akses array karena sudah di-map di getRevenueData
-                    $row['count'], 
+                    $row['date'],
+                    $row['count'],
+                    $row['average'],
                     $row['total']
                 ]);
             }

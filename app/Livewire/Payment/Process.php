@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Enums\PaymentStatus;
 
 #[Layout('layouts.app')]
 class Process extends Component
@@ -21,24 +22,13 @@ class Process extends Component
     public $bukti_pembayaran;
     public ?string $catatan = null;
     public string $selectedMethod = 'transfer_bank';
+    
 
     public array $bankAccounts = [
         'bca' => [
             'name' => 'Bank BCA',
-            'account_number' => '1234567890',
-            'account_name' => 'PT SantriFund Indonesia',
-            'logo' => '🏦',
-        ],
-        'mandiri' => [
-            'name' => 'Bank Mandiri',
-            'account_number' => '0987654321',
-            'account_name' => 'PT SantriFund Indonesia',
-            'logo' => '🏦',
-        ],
-        'bni' => [
-            'name' => 'Bank BNI',
-            'account_number' => '5555666677',
-            'account_name' => 'PT SantriFund Indonesia',
+            'account_number' => '4181414426',
+            'account_name' => 'Amirudin Abdul Aziz',
             'logo' => '🏦',
         ],
     ];
@@ -92,7 +82,7 @@ public function uploadPaymentProof()
             [
                 'jumlah_bayar' => $this->booking->total_biaya,
                 'metode_pembayaran' => $this->selectedMethod,
-                'status_pembayaran' => Payment::STATUS_PENDING,
+                'status_pembayaran' => PaymentStatus::PENDING->value,
                 'tanggal_pembayaran' => now(),
                 'bukti_pembayaran_url' => $path,
                 'catatan' => $this->catatan,

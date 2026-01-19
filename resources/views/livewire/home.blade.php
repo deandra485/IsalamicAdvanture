@@ -33,7 +33,7 @@
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-slate-900/90 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1519904981063-b0cf448d479e?q=80&w=2070" 
+            <img src="/image/background/islamic.jpg" 
                  alt="Mountain Background" 
                  class="w-full h-full object-cover animate-scale-in">
         </div>
@@ -152,7 +152,7 @@
                 </p>
                 
                 <div class="flex flex-wrap gap-4 mb-10">
-                    <a href="#" class="px-8 py-4 rounded-full bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">
+                    <a href="{{ route('packages.index') }}" class="px-8 py-4 rounded-full bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">
                         Mulai Petualangan
                     </a>
                     <a href="{{ route('gallery') }}" class="px-8 py-4 rounded-full bg-white text-slate-700 border border-slate-200 font-bold text-lg hover:bg-slate-50 transition">
@@ -182,21 +182,21 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-4">
-                        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                        <img src="/image/galeri/galeri1.jpg" 
                              alt="Danau Gunung" 
                              class="w-full h-64 object-cover rounded-2xl shadow-xl hover:scale-[1.02] transition duration-500">
                         
-                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                        <img src="/image/galeri/galeri2.jpg" 
                              alt="Traveler" 
                              class="w-full h-40 object-cover rounded-2xl shadow-xl hover:scale-[1.02] transition duration-500">
                     </div>
                     
                     <div class="space-y-4 pt-12">
-                        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                        <img src="image/galeri/galeri3.jpg" 
                              alt="Pemandangan Laut" 
                              class="w-full h-40 object-cover rounded-2xl shadow-xl hover:scale-[1.02] transition duration-500">
                              
-                        <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                        <img src="image/galeri/galeri4.jpg" 
                              alt="Hutan Tropis" 
                              class="w-full h-64 object-cover rounded-2xl shadow-xl hover:scale-[1.02] transition duration-500">
                     </div>
@@ -230,7 +230,7 @@
             <div class="absolute inset-0 rounded-full border border-emerald-500/10 scale-125 group-hover:scale-150 transition duration-1000 delay-100"></div>
             
             <div class="relative w-40 h-40 md:w-48 md:h-48 rounded-full p-2 bg-gradient-to-b from-slate-700 to-slate-900 shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1544377395-5f50d18d8d3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                <img src="/image/galeri/islamic.jpg" 
                      alt="Sir Edmund Hillary" 
                      class="w-full h-full rounded-full object-cover border-4 border-slate-800 grayscale group-hover:grayscale-0 transition duration-500">
                 
@@ -242,12 +242,12 @@
 
         <div class="max-w-3xl mx-auto">
             <h2 class="text-3xl md:text-5xl font-bold text-white leading-tight mb-6 tracking-wide">
-                "Bukan gunung yang kita taklukkan, melainkan <span class="text-emerald-400">diri kita sendiri</span>."
+                "Aku tidak pernah berniat untuk menaklukan gunung mana pun <span class="text-emerald-400">pendakian adalah pengabdian kecilku kepada sang maha pencipta</span>."
             </h2>
             
             <div class="flex flex-col items-center justify-center gap-1">
-                <p class="text-xl text-white font-semibold">Sir Edmund Hillary</p>
-                <p class="text-sm text-slate-400 uppercase tracking-widest">Penakluk Everest Pertama</p>
+                <p class="text-xl text-white font-semibold">Founder Islamic Advanturer</p>
+                <p class="text-sm text-slate-400 uppercase tracking-widest">Open Trip</p>
             </div>
 
             <div class="w-24 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent mx-auto my-10"></div>
@@ -318,7 +318,7 @@
 
     <section class="relative py-32 overflow-hidden mx-4 mb-4 rounded-[3rem]">
         <div class="absolute inset-0 z-0">
-             <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070" 
+             <img src="/image/background/mountain2.jpg" 
                  alt="Background" 
                  class="w-full h-full object-cover">
              <div class="absolute inset-0 bg-slate-900/80 mix-blend-multiply"></div>

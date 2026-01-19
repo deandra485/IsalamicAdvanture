@@ -134,11 +134,11 @@
                         </div>
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Tanggal Mulai</p>
-                            <p class="text-sm text-gray-900">{{ $payment->booking->tanggal_mulai->format('d M Y') }}</p>
+                            <p class="text-sm text-gray-900">{{ $payment->booking?->tanggal_mulai?->format('d M Y') ?? '-' }}</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Tanggal Selesai</p>
-                            <p class="text-sm text-gray-900">{{ $payment->booking->tanggal_selesai->format('d M Y') }}</p>
+                            <p class="text-sm text-gray-900">{{ $payment->booking?->tanggal_selesai?->format('d M Y') ?? '-' }}</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500 mb-1">Durasi</p>
