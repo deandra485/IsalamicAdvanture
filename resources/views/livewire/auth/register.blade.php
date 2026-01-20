@@ -149,7 +149,7 @@
 
     <div class="hidden lg:block relative w-0 flex-1">
         <img class="absolute inset-0 h-full w-full object-cover" 
-             src="https://images.unsplash.com/photo-1543432681-7294c9df2093?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80" 
+             src="/image/background/mountain2.jpg" 
              alt="Islamic Adventure Background">
         <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/50 to-teal-900/20 mix-blend-multiply"></div>
         <div class="absolute bottom-0 left-0 p-20 text-white z-20">
