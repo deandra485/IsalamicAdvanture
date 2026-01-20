@@ -15,7 +15,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Sesuaikan dengan versi PHP Anda
+          php-version: '8.2'  # ✅ Ubah dari 8.1 ke 8.2
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, mysql
+          coverage: none
           
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -45,13 +47,12 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
           exclude: |
-            **/.git*
-            **/.git*/**
             .git/**
+            .github/**
             node_modules/**
             tests/**
+            .env
             .env.example
-            .editorconfig
             .gitignore
             .gitattributes
             phpunit.xml
