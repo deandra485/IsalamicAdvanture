@@ -1,4 +1,4 @@
-name: Deploy Laravel to DirectAdmin
+name: Deploy Laravel Project to DirectAdmin
 on:
   push:
     branches:
@@ -12,15 +12,6 @@ jobs:
       - name: Get the latest code
         uses: actions/checkout@v3
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, mysql
-
-      - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader --no-interaction
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -31,23 +22,29 @@ jobs:
           npm ci
           npm run build
 
-      - name: 📂 Deploy to DirectAdmin
+      - name: 📂 Sync files to DirectAdmin
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /domains/islamicadvanturer.islamicadvanture.com/public_html/
-          timeout: 600000
+          timeout: 300000
           exclude: |
             .git/**
             .github/**
             node_modules/**
+            vendor/**
             tests/**
             storage/logs/**
             storage/framework/cache/**
             storage/framework/sessions/**
             storage/framework/views/**
+            bootstrap/cache/**
             .env
+            .env.example
             .gitignore
+            .gitattributes
+            phpunit.xml
             README.md
+            package-lock.json
