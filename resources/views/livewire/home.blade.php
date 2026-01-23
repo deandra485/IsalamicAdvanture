@@ -256,14 +256,6 @@
                 Rasa sakit hari ini adalah kekuatanmu di hari esok. Jangan berhenti melangkah.
             </p>
 
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <button class="px-8 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-lg shadow-emerald-900/50">
-                    Gabung Open Trip 2026
-                </button>
-                <button class="px-8 py-3 rounded-full bg-transparent border border-slate-600 hover:border-emerald-400 text-slate-300 hover:text-emerald-400 font-semibold transition">
-                    Lihat Galeri Perjalanan
-                </button>
-            </div>
         </div>
 
     </div>
