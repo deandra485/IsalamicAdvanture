@@ -13,31 +13,24 @@ jobs:
       
       - uses: actions/setup-node@master
 
-      # 1. OPTIMIZATION: Build assets (If you use npm/vite)
-      # Un-comment the lines below if you need to build css/js
-      # - run: npm install
-      # - run: npm run build
-
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
 
-      # 2. CRITICAL FIX: Remove .git folder entirely before upload
-      # This guarantees the FTP action never tries to upload it.
+      # ⚠️ CRITICAL: Ensure this step is here to prevent the original crash
       - name: 🗑️ Remove .git folder
         run: rm -rf .git
 
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        # FIX: Added 'v' prefix and updated to 4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # Recommended: Use FTPS if your server supports it for stability
-          protocol: ftps 
-          # Note: Ensure this path is correct. Usually it is /public_html
+          protocol: ftps
           server-dir: /
           exclude: |
             **/.git*
