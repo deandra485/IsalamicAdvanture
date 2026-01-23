@@ -124,7 +124,7 @@ class BookingHistory extends Component
             // Update payment status if exists
             if ($this->selectedBooking->payment) {
                 $this->selectedBooking->payment->update([
-                    'status_pembayaran' => 'cancelled'
+                    'status_pembayaran' => 'failed'
                 ]);
             }
 

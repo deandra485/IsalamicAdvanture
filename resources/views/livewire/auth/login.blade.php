@@ -115,7 +115,7 @@
 
     <div class="hidden lg:block relative w-0 flex-1">
         <img class="absolute inset-0 h-full w-full object-cover" 
-             src="/image/background/islamic.jpg" 
+             src="/image/background/islamic.jpeg" 
              alt="Islamic Architecture">
         <div class="absolute inset-0 bg-emerald-900 mix-blend-multiply opacity-20"></div>
     </div>

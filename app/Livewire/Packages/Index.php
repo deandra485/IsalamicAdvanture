@@ -98,7 +98,7 @@ class Index extends Component
                 $q->where('nama_paket', 'like', '%' . $this->search . '%')
                   ->orWhere('deskripsi', 'like', '%' . $this->search . '%')
                   ->orWhereHas('mountain', function ($m) {
-                      $m->where('name', 'like', '%' . $this->search . '%');
+                      $m->where('nama_gunung', 'like', '%' . $this->search . '%');
                   });
             });
         }

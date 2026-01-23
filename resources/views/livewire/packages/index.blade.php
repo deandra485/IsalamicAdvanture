@@ -56,8 +56,8 @@
                         class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block p-3 appearance-none hover:bg-white transition"
                     >
                         <option value="">Semua Gunung</option>
-                        @foreach($mountains as $mountain)
-                            <option value="{{ $mountain->id }}">{{ $mountain->nama_paket }}</option>
+                        @foreach($packages as $package)
+                            <option value="{{ $package->mountain->id }}">{{ $package->mountain->nama_gunung }}</option>
                         @endforeach
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">

@@ -33,7 +33,7 @@
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-slate-900/90 z-10"></div>
-            <img src="/image/background/islamic.jpg" 
+            <img src="/image/background/islamic.jpeg" 
                  alt="Mountain Background" 
                  class="w-full h-full object-cover animate-scale-in">
         </div>
@@ -192,7 +192,7 @@
                     </div>
                     
                     <div class="space-y-4 pt-12">
-                        <img src="image/galeri/galeri3.jpg" 
+                        <img src="image/galeri/galeri3.jpeg" 
                              alt="Pemandangan Laut" 
                              class="w-full h-40 object-cover rounded-2xl shadow-xl hover:scale-[1.02] transition duration-500">
                              

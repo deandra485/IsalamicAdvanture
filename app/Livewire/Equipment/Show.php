@@ -53,7 +53,7 @@ class Show extends Component
             $end = Carbon::parse($this->tanggalSelesai);
             
             if ($end->gt($start)) {
-                $this->durasi = $start->diffInDays($end) + 1;
+                $this->durasi = $start->diffInDays($end) + 0;
                 $this->totalHarga = $this->durasi * $this->equipment->harga_sewa_perhari * $this->quantity;
                 
                 // Check availability
