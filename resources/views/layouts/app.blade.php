@@ -28,6 +28,15 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @extends('layouts.app')
+
+        @section('title', 'OpenTrip Islamic Advanture | Open Trip Gunung')
+        @section('description', 'Nikmati open trip gunung dan wisata halal aman & nyaman bersama tim profesional untuk muslim traveler di Indonesia.')
+
+        @section('content')
+            <h1>Selamat datang di OpenTrip Islamic Advanture!</h1>
+            <p>Jelajahi paket wisata halal dan pendakian gunung terbaik kami.</p>
+        @endsection
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
