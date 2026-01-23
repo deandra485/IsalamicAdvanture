@@ -1,3 +1,4 @@
+```
 name: Deploy Laravel Project on push to cpanel
 on:
   push:
@@ -8,41 +9,20 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      # UPDATE: Menggunakan versi checkout terbaru (v4)
       - name: Get the latest code
-        uses: actions/checkout@v4
-
-      # UPDATE: Menggunakan setup-node versi stabil (v4)
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
+        uses: actions/checkout@v2.3.2
+      - uses: actions/setup-node@master
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
-
-      # PENTING: Langkah ini menghapus folder .git sebelum upload
-      # Ini mencegah error "Client is closed" yang kamu alami sebelumnya
-      - name: 🗑️ Remove .git folder
-        run: rm -rf .git
-
       - name: 📂 Sync files
-        # UPDATE: Menggunakan versi action FTP terbaru (v4.3.5)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /
-          
-          # SETTING TAMBAHAN: Agar koneksi stabil di cPanel
-          protocol: ftp       # Pakai FTP biasa agar tidak diblokir firewall
-          port: 21            # Port standar
-          timeout: 60000      # Waktu tunggu diperlama jadi 1 menit
-          
           exclude: |
             **/.git*
             **/.git*/**
@@ -55,3 +35,4 @@ jobs:
             **/tests/**
             **/vendor/**
             **.env
+```
