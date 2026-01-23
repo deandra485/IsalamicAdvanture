@@ -14,7 +14,8 @@
         "laravel/socialite": "^5.24",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6.4",
-        "midtrans/midtrans-php": "^2.6"
+        "midtrans/midtrans-php": "^2.6",
+        "spatie/laravel-sitemap": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

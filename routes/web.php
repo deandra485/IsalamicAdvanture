@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str; 
 use Laravel\Socialite\Facades\Socialite; 
 use App\Models\User; 
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +124,14 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken();
     return redirect('/');
 })->middleware('auth')->name('logout');
+
+
+Route::get('/sitemap.xml', function () {
+    return Sitemap::create()
+        ->add('/')
+        ->add('/paket')
+        ->toResponse(request());
+});
 
 /*
 |--------------------------------------------------------------------------
