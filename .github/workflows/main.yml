@@ -1,4 +1,3 @@
-```
 name: Deploy Laravel Project on push to cpanel
 on:
   push:
@@ -35,4 +34,3 @@ jobs:
             **/tests/**
             **/vendor/**
             **.env
-```
