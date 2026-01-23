@@ -148,7 +148,7 @@
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Alam Indonesia</span>
                 </h1>
                 <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                    Temukan destinasi tersembunyi yang belum pernah Anda bayangkan. Dari pegunungan berkabut hingga pantai tropis, kami siapkan perjalanan tak terlupakan.
+                    Temukan destinasi tersembunyi yang belum pernah Anda bayangkan. Dari pegunungan-pegunungan berkabut yang ada di indonesia ini, kami siapkan perjalanan tak terlupakan.
                 </p>
                 
                 <div class="flex flex-wrap gap-4 mb-10">
