@@ -5,9 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', 'OpenTrip Islamic Advanture | Open Trip Gunung & Wisata Halal Terpercaya')</title>
+        <title>@yield('title', 'Islamic Advanturer | Open Trip Gunung & Wisata Halal Terpercaya')</title>
 
-        <meta name="description" content="@yield('description', 'OpenTrip Islamic Advanture menyediakan paket trip naik gunung, wisata alam, dan perjalanan halal yang aman, nyaman, dan terpercaya untuk para muslim traveler di Indonesia.')">
+        <meta name="description" content="@yield('description', 'OpenTrip Islamic Advanturer menyediakan paket trip naik gunung, wisata alam, dan perjalanan halal yang aman, nyaman, dan terpercaya untuk para muslim traveler di Indonesia.')">
 
         <meta name="keywords" content="open trip gunung, wisata halal, trip islami, pendakian gunung, travel syariah, open trip indonesia">
 
