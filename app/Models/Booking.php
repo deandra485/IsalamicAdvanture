@@ -145,6 +145,31 @@ class Booking extends Model
         return in_array($this->status_booking, ['pending', 'confirmed']);
     }
 
+    public function canBeReviewed()
+    {
+        return $this->status_booking === 'completed' && !$this->review;
+    }
+
+    /**
+     * ===============================
+     * Scopes
+     * ===============================
+     */
+    public function scopeCompleted($query)
+    {
+        return $query->where('status_booking', 'completed');
+    }
+
+    public function scopeWithoutReview($query)
+    {
+        return $query->whereDoesntHave('review');
+    }
+
+    public function scopeCanBeReviewed($query)
+    {
+        return $query->completed()->withoutReview();
+    }
+
     /**
      * ===============================
      * Model Events

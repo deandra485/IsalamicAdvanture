@@ -14,6 +14,7 @@ class Review extends Model
         'booking_id',
         'rating',
         'komentar',
+        'photos',
         'is_approved',
         'approved_by',
     ];
@@ -21,6 +22,7 @@ class Review extends Model
     protected $casts = [
         'is_approved' => 'boolean',
         'rating' => 'integer',
+        'photos' => 'array',
     ];
 
     // Relationships
@@ -42,5 +44,28 @@ class Review extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    // Scopes
+    public function scopeApproved($query)
+    {
+        return $query->where('is_approved', true);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('is_approved', false);
+    }
+
+    // Accessors
+    public function getPhotoUrlsAttribute()
+    {
+        if (empty($this->photos)) {
+            return [];
+        }
+
+        return collect($this->photos)->map(function ($photo) {
+            return asset('storage/' . $photo);
+        })->toArray();
     }
 }

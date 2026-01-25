@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('booking_id')->nullable()->constrained()->onDelete('set null');
             $table->integer('rating');
             $table->text('komentar')->nullable();
+            $table->json('photos')->nullable();
             $table->boolean('is_approved')->default(false);
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
@@ -28,6 +29,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+       Schema::table('reviews', function (Blueprint $table) {
+            $table->dropColumn('photos');
+        });
     }
 };

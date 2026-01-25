@@ -208,7 +208,7 @@ class Show extends Component
             DB::transaction(function () {
                 // Update payment
                 $this->payment->update([
-                    'status_pembayaran' => 'rejected',
+                    'status_pembayaran' => 'failed',
                     'verified_by' => Auth::id(),
                     'catatan' => $this->rejectReason,
                 ]);

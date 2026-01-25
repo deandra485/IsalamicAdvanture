@@ -44,6 +44,7 @@ use App\Livewire\User\BookingHistory;
 use App\Livewire\User\Profile;
 use App\Livewire\User\BookingShow;
 
+
 /*
 |--------------------------------------------------------------------------
 | ADMIN LIVEWIRE
@@ -64,6 +65,7 @@ use App\Livewire\Admin\Payments\Show as PaymentShow;
 use App\Livewire\Admin\Reviews\Index as AdminReviewsIndex;
 use App\Livewire\Admin\Users\Index as AdminUsersIndex;
 use App\Livewire\Admin\Reports\Index as AdminReportsIndex;
+use App\Livewire\Reviews\MyReviews;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 
@@ -153,6 +155,10 @@ Route::prefix('packages')->name('packages.')->group(function () {
     Route::get('{package}', PackageShow::class)->name('show');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-reviews', MyReviews::class)
+        ->name('reviews.my-reviews');
+});
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATED USER (DIPISAH JADI 2 GROUP)
