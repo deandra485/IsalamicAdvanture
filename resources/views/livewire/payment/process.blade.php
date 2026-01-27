@@ -184,17 +184,17 @@
                                 <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 animate-fade-in-down">
                                     <h3 class="font-bold text-gray-900 mb-4">Scan QR atau Transfer</h3>
                                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                        <div class="bg-white p-4 rounded-xl border text-center shadow-sm">
+                                        {{-- <div class="bg-white p-4 rounded-xl border text-center shadow-sm">
                                             <div class="h-10 flex items-center justify-center mb-2 font-bold text-blue-600">GOPAY</div>
                                             <p class="text-sm font-mono font-bold">0812-3456-7890</p>
                                         </div>
                                         <div class="bg-white p-4 rounded-xl border text-center shadow-sm">
                                             <div class="h-10 flex items-center justify-center mb-2 font-bold text-purple-600">OVO</div>
                                             <p class="text-sm font-mono font-bold">0812-3456-7890</p>
-                                        </div>
+                                        </div> --}}
                                         <div class="bg-white p-4 rounded-xl border text-center shadow-sm">
                                             <div class="h-10 flex items-center justify-center mb-2 font-bold text-blue-500">DANA</div>
-                                            <p class="text-sm font-mono font-bold">0812-3456-7890</p>
+                                            <p class="text-sm font-mono font-bold">0813-24950366</p>
                                         </div>
                                     </div>
                                 </div>
