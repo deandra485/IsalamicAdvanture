@@ -9,12 +9,11 @@ class HikingRouteSeeder extends Seeder
 {
     public function run(): void
     {
+        // Urutan ID akan mengikuti urutan array ini (Auto Increment DB)
         $routes = [
             // ===========================
-            // JAWA BARAT (ID 1-3)
+            // 1. GUNUNG GEDE
             // ===========================
-
-            // 1. Gunung Gede
             [
                 'mountain_id' => 1,
                 'nama_jalur' => 'Jalur Cibodas',
@@ -23,18 +22,29 @@ class HikingRouteSeeder extends Seeder
                 'jarak_km' => 10.5,
                 'deskripsi_jalur' => 'Jalur populer melewati Telaga Biru dan Air Terjun Cibeureum, didominasi tangga batu.',
                 'is_available' => true,
-            ],
+            ], // ID: 1
             [
                 'mountain_id' => 1,
                 'nama_jalur' => 'Jalur Putri',
                 'tingkat_kesulitan' => 'sedang',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 8.0,
-                'deskripsi_jalur' => 'Jalur lebih pendek namun terjal dengan dominasi akar pepohonan.',
+                'deskripsi_jalur' => 'Jalur lebih pendek namun terjal dengan dominasi akar pepohonan (dengkul ketemu dagu).',
                 'is_available' => true,
-            ],
+            ], // ID: 2
+            [
+                'mountain_id' => 1,
+                'nama_jalur' => 'Jalur Selabintana',
+                'tingkat_kesulitan' => 'sulit',
+                'estimasi_waktu_hari' => 2,
+                'jarak_km' => 12.5,
+                'deskripsi_jalur' => 'Jalur terpanjang dan terliar via Sukabumi, banyak pacet dan lumpur.',
+                'is_available' => true,
+            ], // ID: 3
 
-            // 2. Gunung Papandayan
+            // ===========================
+            // 2. GUNUNG PAPANDAYAN
+            // ===========================
             [
                 'mountain_id' => 2,
                 'nama_jalur' => 'Jalur Camp David',
@@ -43,137 +53,188 @@ class HikingRouteSeeder extends Seeder
                 'jarak_km' => 6.5,
                 'deskripsi_jalur' => 'Cocok untuk pemula dan wisata keluarga, melewati kawah aktif dan Hutan Mati.',
                 'is_available' => true,
-            ],
+            ], // ID: 4
 
-            // 3. Gunung Ciremai
+            // ===========================
+            // 3. GUNUNG CIREMAI
+            // ===========================
             [
                 'mountain_id' => 3,
                 'nama_jalur' => 'Jalur Apuy',
                 'tingkat_kesulitan' => 'sulit',
                 'estimasi_waktu_hari' => 2,
-                'jarak_km' => 12.0,
-                'deskripsi_jalur' => 'Jalur favorit via Majalengka, trek cukup terjal namun pemandangan terbuka.',
+                'jarak_km' => 10.0,
+                'deskripsi_jalur' => 'Jalur via Majalengka, trek terjal namun waktu tempuh relatif lebih singkat.',
                 'is_available' => true,
-            ],
+            ], // ID: 5
+            [
+                'mountain_id' => 3,
+                'nama_jalur' => 'Jalur Palutungan',
+                'tingkat_kesulitan' => 'sedang',
+                'estimasi_waktu_hari' => 2,
+                'jarak_km' => 11.5,
+                'deskripsi_jalur' => 'Jalur via Kuningan, trek landai dan panjang, banyak sumber air di pos awal.',
+                'is_available' => true,
+            ], // ID: 6
+            [
+                'mountain_id' => 3,
+                'nama_jalur' => 'Jalur Linggarjati',
+                'tingkat_kesulitan' => 'sangat sulit',
+                'estimasi_waktu_hari' => 3, // Biasanya butuh waktu lebih lama
+                'jarak_km' => 14.0,
+                'deskripsi_jalur' => 'Jalur legendaris dengan tanjakan "Bapak Tere", sangat menguras fisik.',
+                'is_available' => true,
+            ], // ID: 7
 
             // ===========================
-            // JAWA TENGAH (ID 4-8)
+            // 4. GUNUNG MERBABU
             // ===========================
-
-            // 4. Gunung Merbabu
             [
                 'mountain_id' => 4,
                 'nama_jalur' => 'Jalur Selo',
                 'tingkat_kesulitan' => 'sedang',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 9.5,
-                'deskripsi_jalur' => 'Jalur paling populer dengan pemandangan sabana yang indah dan trek tanah.',
+                'deskripsi_jalur' => 'Jalur sejuta umat, pemandangan sabana indah, tidak ada sumber air.',
                 'is_available' => true,
-            ],
+            ], // ID: 8
             [
                 'mountain_id' => 4,
                 'nama_jalur' => 'Jalur Suwanting',
                 'tingkat_kesulitan' => 'sulit',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 10.0,
-                'deskripsi_jalur' => 'Trek menantang dengan sumber air melimpah dan pemandangan hutan pinus.',
+                'deskripsi_jalur' => 'View premium namun trek sangat menantang dan debu tebal saat kemarau.',
                 'is_available' => true,
-            ],
+            ], // ID: 9
+            [
+                'mountain_id' => 4,
+                'nama_jalur' => 'Jalur Wekas',
+                'tingkat_kesulitan' => 'sedang',
+                'estimasi_waktu_hari' => 2,
+                'jarak_km' => 8.5,
+                'deskripsi_jalur' => 'Jalur tercepat mencapai pos pemancar, sumber air melimpah di Pos 2.',
+                'is_available' => true,
+            ], // ID: 10
 
-            // 5. Gunung Prau
+            // ===========================
+            // 5. GUNUNG PRAU
+            // ===========================
             [
                 'mountain_id' => 5,
                 'nama_jalur' => 'Jalur Patak Banteng',
                 'tingkat_kesulitan' => 'mudah',
                 'estimasi_waktu_hari' => 1,
                 'jarak_km' => 3.5,
-                'deskripsi_jalur' => 'Jalur pendek, cepat, dan sangat ramai. Terkenal dengan spot Golden Sunrise.',
+                'deskripsi_jalur' => 'Jalur sangat curam tapi sangat cepat sampai puncak (2-3 jam).',
                 'is_available' => true,
-            ],
+            ], // ID: 11
+            [
+                'mountain_id' => 5,
+                'nama_jalur' => 'Jalur Dieng (Dwarawati)',
+                'tingkat_kesulitan' => 'mudah',
+                'estimasi_waktu_hari' => 1,
+                'jarak_km' => 4.5,
+                'deskripsi_jalur' => 'Jalur lebih landai dan santai, cocok untuk keluarga, start dari area Candi.',
+                'is_available' => true,
+            ], // ID: 12
 
-            // 6. Gunung Slamet
+            // ===========================
+            // 6. GUNUNG SLAMET
+            // ===========================
             [
                 'mountain_id' => 6,
                 'nama_jalur' => 'Jalur Bambangan',
                 'tingkat_kesulitan' => 'sulit',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 11.0,
-                'deskripsi_jalur' => 'Gerbang utama atap Jawa Tengah via Purbalingga, trek tanah merah panjang.',
+                'deskripsi_jalur' => 'Gerbang utama atap Jawa Tengah, trek tanah merah licin saat hujan.',
                 'is_available' => true,
-            ],
+            ], // ID: 13
             [
                 'mountain_id' => 6,
-                'nama_jalur' => 'Jalur Permadi Guci', // <--- TAMBAHAN BARU
-                'tingkat_kesulitan' => 'sedang', // Relatif lebih landai dibanding Bambangan
+                'nama_jalur' => 'Jalur Permadi Guci',
+                'tingkat_kesulitan' => 'sedang',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 10.5,
-                'deskripsi_jalur' => 'Start dari wisata Guci Tegal, jalur terkenal dengan hutan asri dan trek yang relatif lebih landai.',
+                'deskripsi_jalur' => 'Bonus mandi air panas Guci setelah turun, trek hutan asri.',
                 'is_available' => true,
-            ],
+            ], // ID: 14
 
-            // 7. Gunung Sumbing
+            // ===========================
+            // 7. GUNUNG SUMBING
+            // ===========================
             [
                 'mountain_id' => 7,
                 'nama_jalur' => 'Jalur Garung',
                 'tingkat_kesulitan' => 'sulit',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 9.0,
-                'deskripsi_jalur' => 'Jalur populer via Wonosobo. Trek batu tersusun rapi namun sangat terjal.',
+                'deskripsi_jalur' => 'Jalur sejuta umat, trek batu (pestisida) dan tanjakan engkol-engkolan.',
                 'is_available' => true,
-            ],
+            ], // ID: 15
             [
                 'mountain_id' => 7,
                 'nama_jalur' => 'Jalur Kaliangkrik (Adipuro)',
                 'tingkat_kesulitan' => 'sedang',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 10.5,
-                'deskripsi_jalur' => 'Jalur via Magelang, trek relatif lebih landai dibanding Garung namun lebih panjang.',
+                'deskripsi_jalur' => 'Start dari Nepal van Java, pemandangan desa sangat indah.',
                 'is_available' => true,
-            ],
+            ], // ID: 16
 
-            // 8. Gunung Sindoro
+            // ===========================
+            // 8. GUNUNG SINDORO
+            // ===========================
             [
                 'mountain_id' => 8,
                 'nama_jalur' => 'Jalur Kledung',
                 'tingkat_kesulitan' => 'sedang',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 7.5,
-                'deskripsi_jalur' => 'Basecamp di pinggir jalan raya, pemandangan Gunung Sumbing terlihat jelas.',
+                'deskripsi_jalur' => 'Paling populer, akses mudah di pinggir jalan raya provinsi.',
                 'is_available' => true,
-            ],
+            ], // ID: 17
             [
                 'mountain_id' => 8,
                 'nama_jalur' => 'Jalur Alang-Alang Sewu',
                 'tingkat_kesulitan' => 'sulit',
                 'estimasi_waktu_hari' => 2,
                 'jarak_km' => 8.5,
-                'deskripsi_jalur' => 'Jalur via Wonosobo, trek cukup terjal namun sunyi dan alami.',
+                'deskripsi_jalur' => 'Jalur sunyi, vegetasi rapat dan alami.',
                 'is_available' => true,
-            ],
+            ], // ID: 18
 
             // ===========================
-            // LOMBOK (ID 9)
+            // 9. GUNUNG RINJANI
             // ===========================
-
-            // 9. Gunung Rinjani
             [
                 'mountain_id' => 9,
                 'nama_jalur' => 'Jalur Sembalun',
                 'tingkat_kesulitan' => 'sangat sulit',
-                'estimasi_waktu_hari' => 3, // Biasanya 3-4 hari
+                'estimasi_waktu_hari' => 3,
                 'jarak_km' => 20.0,
-                'deskripsi_jalur' => 'Jalur padang savana terbuka, rute utama untuk mengejar puncak (summit attack).',
+                'deskripsi_jalur' => 'Rute padang savana, akses utama menuju Puncak (Summit).',
                 'is_available' => true,
-            ],
+            ], // ID: 19
             [
                 'mountain_id' => 9,
                 'nama_jalur' => 'Jalur Senaru',
                 'tingkat_kesulitan' => 'sangat sulit',
                 'estimasi_waktu_hari' => 3,
                 'jarak_km' => 22.0,
-                'deskripsi_jalur' => 'Start dari hutan tropis, biasanya digunakan untuk rute turun ke Danau Segara Anak.',
+                'deskripsi_jalur' => 'Rute hutan tropis, akses utama menuju Danau Segara Anak.',
                 'is_available' => true,
-            ],
+            ], // ID: 20
+            [
+                'mountain_id' => 9,
+                'nama_jalur' => 'Jalur Torean',
+                'tingkat_kesulitan' => 'sulit',
+                'estimasi_waktu_hari' => 3,
+                'jarak_km' => 18.0,
+                'deskripsi_jalur' => 'Jalur "Jurassic Park", menyusuri lembah sungai putih dan tebing eksotis.',
+                'is_available' => true,
+            ], // ID: 21
         ];
 
         foreach ($routes as $route) {

@@ -9,9 +9,9 @@ class PackageSeeder extends Seeder
 {
     public function run(): void
     {
-        // Template Deskripsi sesuai gambar (Bisa dipakai berulang)
-        $deskripsiOpenTrip = "FASILITAS ALL INCLUDE (TERIMA BERES):
-- Transportasi Elf/Bus AC (Meeting Point - Basecamp PP)
+        // 1. TEMPLATE DESKRIPSI
+        $descJkt = "FASILITAS ALL INCLUDE (TERIMA BERES):
+- Transportasi Elf/Bus AC (Jabodetabek - Basecamp PP)
 - Driver, BBM, Tips Tol/Parkir
 - E-Ticket / Simaksi Pendakian
 - Rumah Singgah / Homestay
@@ -29,140 +29,92 @@ EXCLUDE:
 - Perlengkapan Pribadi (Tas, Sepatu, Jaket, Sleeping Bag)
 - Cemilan Pribadi";
 
+        $descMjk = str_replace('(Jabodetabek - Basecamp PP)', '(Majalengka - Basecamp PP)', $descJkt);
+        $descRinjani = str_replace('Transportasi Elf/Bus AC (Jabodetabek - Basecamp PP)', 'Transportasi Bandara Lombok - Sembalun PP', $descJkt);
+
+        // DATA PAKET (Hanya butuh mountain_id, tanpa hiking_route_id)
         $packages = [
-            // ===========================
-            // JAWA BARAT (Start Jakarta/Bandung)
-            // ===========================
-            [
-                'mountain_id' => 1, // Gede
-                'nama_paket' => 'Open Trip Gunung Gede Pangrango',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 350000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15, // Open trip biasanya rame
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
-            [
-                'mountain_id' => 2, // Papandayan
-                'nama_paket' => 'Open Trip Ceria Papandayan',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 325000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
-            [
-                'mountain_id' => 3, // Ciremai
-                'nama_paket' => 'Open Trip Atap Jawa Barat (Ciremai)',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 400000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
+            // --- GUNUNG GEDE (ID: 1) ---
+            ['m_id' => 1, 'name' => 'Open Trip Gede via Cibodas', 'price' => 350000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 1, 'name' => 'Open Trip Gede via Cibodas', 'price' => 375000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 1, 'name' => 'Open Trip Gede via Putri', 'price' => 350000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 1, 'name' => 'Open Trip Gede via Putri', 'price' => 375000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 1, 'name' => 'Open Trip Gede via Selabintana', 'price' => 400000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 1, 'name' => 'Open Trip Gede via Selabintana', 'price' => 425000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
 
-            // ===========================
-            // JAWA TENGAH (Start Jakarta/Jateng)
-            // ===========================
-            [
-                'mountain_id' => 4, // Merbabu
-                'nama_paket' => 'Open Trip Merbabu via Selo',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 450000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
-            [
-                'mountain_id' => 5, // Prau
-                'nama_paket' => 'Open Trip Prau Golden Sunrise',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 350000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
-            [
-                'mountain_id' => 6, // Slamet (Sesuai Gambar)
-                'nama_paket' => 'Open Trip Slamet via Permadi Guci',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 450000, // Sesuai gambar 450k
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
-            [
-                'mountain_id' => 7, // Sumbing
-                'nama_paket' => 'Open Trip Sumbing via Garung',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 425000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
-            [
-                'mountain_id' => 8, // Sindoro
-                'nama_paket' => 'Open Trip Sindoro via Kledung',
-                'deskripsi' => $deskripsiOpenTrip,
-                'harga_paket' => 425000,
-                'durasi_hari' => 2,
-                'max_peserta' => 15,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
+            // --- GUNUNG PAPANDAYAN (ID: 2) ---
+            ['m_id' => 2, 'name' => 'Open Trip Papandayan via Camp David', 'price' => 325000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 2, 'name' => 'Open Trip Papandayan via Camp David', 'price' => 275000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
 
-            // ===========================
-            // LOMBOK (Khusus Rinjani harga beda)
-            // ===========================
-            [
-                'mountain_id' => 9, // Rinjani
-                'nama_paket' => 'Open Trip Rinjani Summit 4D3N',
-                'deskripsi' => str_replace('Transportasi Elf/Bus AC', 'Transportasi Bandara - Sembalun PP', $deskripsiOpenTrip), // Edit dikit transportnya
-                'harga_paket' => 2800000, // Harga Rinjani jauh lebih mahal
-                'durasi_hari' => 4,
-                'max_peserta' => 10,
-                'include_guide' => true,
-                'is_active' => true,
-                'created_by' => 1,
-            ],
+            // --- GUNUNG CIREMAI (ID: 3) ---
+            ['m_id' => 3, 'name' => 'Open Trip Ciremai via Apuy', 'price' => 400000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 3, 'name' => 'Open Trip Ciremai via Apuy', 'price' => 200000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 3, 'name' => 'Open Trip Ciremai via Palutungan', 'price' => 400000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 3, 'name' => 'Open Trip Ciremai via Palutungan', 'price' => 225000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 3, 'name' => 'Open Trip Ciremai via Linggarjati', 'price' => 450000, 'dur' => 3, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 3, 'name' => 'Open Trip Ciremai via Linggarjati', 'price' => 275000, 'dur' => 3, 'desc' => $descMjk, 'type' => 'mjk'],
+
+            // --- GUNUNG MERBABU (ID: 4) ---
+            ['m_id' => 4, 'name' => 'Open Trip Merbabu via Selo', 'price' => 450000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 4, 'name' => 'Open Trip Merbabu via Selo', 'price' => 350000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 4, 'name' => 'Open Trip Merbabu via Suwanting', 'price' => 450000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 4, 'name' => 'Open Trip Merbabu via Suwanting', 'price' => 350000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 4, 'name' => 'Open Trip Merbabu via Wekas', 'price' => 450000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 4, 'name' => 'Open Trip Merbabu via Wekas', 'price' => 350000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+
+            // --- GUNUNG PRAU (ID: 5) ---
+            ['m_id' => 5, 'name' => 'Open Trip Prau via Patak Banteng', 'price' => 350000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 5, 'name' => 'Open Trip Prau via Patak Banteng', 'price' => 250000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 5, 'name' => 'Open Trip Prau via Dieng', 'price' => 350000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 5, 'name' => 'Open Trip Prau via Dieng', 'price' => 250000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+
+            // --- GUNUNG SLAMET (ID: 6) ---
+            ['m_id' => 6, 'name' => 'Open Trip Slamet via Bambangan', 'price' => 450000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 6, 'name' => 'Open Trip Slamet via Bambangan', 'price' => 350000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 6, 'name' => 'Open Trip Slamet via Permadi Guci', 'price' => 450000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 6, 'name' => 'Open Trip Slamet via Permadi Guci', 'price' => 350000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+
+            // --- GUNUNG SUMBING (ID: 7) ---
+            ['m_id' => 7, 'name' => 'Open Trip Sumbing via Garung', 'price' => 425000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 7, 'name' => 'Open Trip Sumbing via Garung', 'price' => 325000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 7, 'name' => 'Open Trip Sumbing via Kaliangkrik', 'price' => 425000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 7, 'name' => 'Open Trip Sumbing via Kaliangkrik', 'price' => 325000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+
+            // --- GUNUNG SINDORO (ID: 8) ---
+            ['m_id' => 8, 'name' => 'Open Trip Sindoro via Kledung', 'price' => 425000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 8, 'name' => 'Open Trip Sindoro via Kledung', 'price' => 325000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+            ['m_id' => 8, 'name' => 'Open Trip Sindoro via Alang-Alang Sewu', 'price' => 425000, 'dur' => 2, 'desc' => $descJkt, 'type' => 'jkt'],
+            ['m_id' => 8, 'name' => 'Open Trip Sindoro via Alang-Alang Sewu', 'price' => 325000, 'dur' => 2, 'desc' => $descMjk, 'type' => 'mjk'],
+
+            // --- GUNUNG RINJANI (ID: 9) ---
+            ['m_id' => 9, 'name' => 'Open Trip Rinjani via Sembalun', 'price' => 3500000, 'dur' => 4, 'desc' => $descRinjani, 'type' => 'jkt'],
+            ['m_id' => 9, 'name' => 'Open Trip Rinjani via Sembalun', 'price' => 2800000, 'dur' => 4, 'desc' => $descRinjani, 'type' => 'mjk'],
+            ['m_id' => 9, 'name' => 'Open Trip Rinjani via Senaru', 'price' => 3500000, 'dur' => 4, 'desc' => $descRinjani, 'type' => 'jkt'],
+            ['m_id' => 9, 'name' => 'Open Trip Rinjani via Senaru', 'price' => 2800000, 'dur' => 4, 'desc' => $descRinjani, 'type' => 'mjk'],
+            ['m_id' => 9, 'name' => 'Open Trip Rinjani via Torean', 'price' => 3500000, 'dur' => 4, 'desc' => $descRinjani, 'type' => 'jkt'],
+            ['m_id' => 9, 'name' => 'Open Trip Rinjani via Torean', 'price' => 2800000, 'dur' => 4, 'desc' => $descRinjani, 'type' => 'mjk'],
         ];
 
-        foreach ($packages as $package) {
-            $pkg = Package::create($package);
+        foreach ($packages as $data) {
+            $suffix = ($data['type'] == 'jkt') ? ' (Start Jabodetabek)' : ' (Start Majalengka)';
 
-            // ==========================================
-            // LOGIKA PERALATAN (SESUAI GAMBAR)
-            // ==========================================
-            // Gambar bilang: Include Tenda, Kompor, Nesting, Gas.
-            // Gambar bilang: Exclude Perlengkapan Pribadi (Sleeping Bag, Matras, Carrier).
-            
-            // Maka kita hanya attach alat KELOMPOK saja.
-            // Pastikan ID ini sesuai tabel 'equipment' Anda:
-            // 1 = Tenda
-            // 6 = Kompor
-            // 7 = Nesting (Contoh ID)
-            // 8 = Gas (Contoh ID)
+            $pkg = Package::create([
+                'mountain_id'   => $data['m_id'],
+                // 'hiking_route_id' KITA HAPUS
+                'nama_paket'    => $data['name'] . $suffix,
+                'deskripsi'     => $data['desc'],
+                'harga_paket'   => $data['price'],
+                'durasi_hari'   => $data['dur'],
+                'max_peserta'   => 15,
+                'include_guide' => true,
+                'is_active'     => true,
+                'created_by'    => 1,
+            ]);
 
-            // Menggunakan ID yang umum (sesuaikan dengan DB Anda):
+            // Attach Equipment
             $pkg->equipment()->attach([
-                1 => ['quantity' => 1], // Tenda (1 tenda utk 4 orang)
-                6 => ['quantity' => 1], // Kompor (1 kompor per regu)
-                // Jika Anda punya ID untuk Nesting/Gas, tambahkan disini
+                1 => ['quantity' => 1], // Tenda
+                6 => ['quantity' => 1]  // Kompor
             ]);
         }
     }
