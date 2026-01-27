@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="{{ asset('image/favicon/favicon.ico') }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('image/favicon/apple-touch-icon.png') }}" />
     <link rel="manifest" href="{{ asset('image/favicon/site.webmanifest') }}" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>

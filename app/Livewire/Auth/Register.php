@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 #[Layout('layouts.guest')]
 class Register extends Component
@@ -16,6 +17,7 @@ class Register extends Component
     public $password_confirmation = '';
     public $no_telepon = '';
     public $alamat = '';
+    public $recaptcha_token = ''; // Property baru untuk reCAPTCHA
 
     protected $rules = [
         'name' => 'required|string|max:100',
@@ -23,6 +25,7 @@ class Register extends Component
         'password' => 'required|min:6|confirmed',
         'no_telepon' => 'nullable|string|max:20',
         'alamat' => 'nullable|string',
+        'recaptcha_token' => 'required', // Validasi reCAPTCHA
     ];
 
     protected $messages = [
@@ -33,12 +36,33 @@ class Register extends Component
         'password.required' => 'Password wajib diisi',
         'password.min' => 'Password minimal 6 karakter',
         'password.confirmed' => 'Konfirmasi password tidak cocok',
+        'recaptcha_token.required' => 'Silakan verifikasi bahwa Anda bukan robot.',
     ];
 
     public function register()
     {
+        // Validasi form
         $this->validate();
 
+        // Verifikasi reCAPTCHA
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret_key'),
+            'response' => $this->recaptcha_token,
+            'remoteip' => request()->ip()
+        ]);
+
+        $result = $response->json();
+
+        // Jika verifikasi gagal
+        if (!$result['success']) {
+            $this->addError('g-recaptcha-response', 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.');
+            
+            // Reset reCAPTCHA
+            $this->dispatch('resetRecaptcha');
+            return;
+        }
+
+        // Jika verifikasi berhasil, lanjutkan registrasi
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,

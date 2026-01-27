@@ -17,24 +17,6 @@
                 </p>
             </div>
 
-            {{-- <div class="mt-8">
-                <div>
-                    <a href="{{ route('auth.google') }}" 
-               class="w-full inline-flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-150 transform hover:scale-[1.01]">
-                <img class="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
-                <span>Daftar dengan Google</span>
-            </a>
-                </div>
-
-                <div class="mt-6 relative">
-                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                        <div class="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-2 bg-white text-gray-500">Atau daftar dengan email</span>
-                    </div>
-                </div>
-            </div> --}}
             <form wire:submit="register" class="mt-6 space-y-6">
                 
                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
@@ -155,7 +137,19 @@
                     </div>
                 </div>
 
+                {{-- BAGIAN RECAPTCHA BARU --}}
                 <div class="pt-4">
+                    <div class="flex justify-center">
+                        <div wire:ignore>
+                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-callback="onRecaptchaSuccess"></div>
+                        </div>
+                    </div>
+                    @error('g-recaptcha-response') 
+                        <p class="mt-2 text-xs text-red-600 text-center">{{ $message }}</p> 
+                    @enderror
+                </div>
+
+                <div class="pt-2">
                     <button type="submit" wire:loading.attr="disabled"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
                         <span wire:loading.remove>Buat Akun Sekarang</span>
@@ -188,3 +182,13 @@
         </div>
     </div>
 </div>
+
+{{-- Script reCAPTCHA --}}
+@push('scripts')
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    function onRecaptchaSuccess(token) {
+        @this.set('recaptcha_token', token);
+    }
+</script>
+@endpush
