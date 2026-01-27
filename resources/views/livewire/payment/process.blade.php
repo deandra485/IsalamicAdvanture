@@ -194,7 +194,7 @@
                                         </div> --}}
                                         <div class="bg-white p-4 rounded-xl border text-center shadow-sm">
                                             <div class="h-10 flex items-center justify-center mb-2 font-bold text-blue-500">DANA</div>
-                                            <p class="text-sm font-mono font-bold">0813-24950366</p>
+                                            <p class="text-sm font-mono font-bold">0813-2495-0366</p>
                                         </div>
                                     </div>
                                 </div>
