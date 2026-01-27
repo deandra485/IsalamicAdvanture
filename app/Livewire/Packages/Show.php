@@ -110,7 +110,7 @@ class Show extends Component
         session()->put('cart', $cart);
         session()->flash('success', 'Siap! Paket & Tanggal berhasil disimpan.');
         
-        $this->dispatch('cart-updated'); 
+        return redirect()->route('booking.cart'); 
         
         // Reset (Opsional, kalau mau user tetap di halaman buat nambah lagi)
         // $this->quantity = 1;
