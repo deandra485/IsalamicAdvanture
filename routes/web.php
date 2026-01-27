@@ -65,7 +65,7 @@ use App\Livewire\Admin\Payments\Show as PaymentShow;
 use App\Livewire\Admin\Reviews\Index as AdminReviewsIndex;
 use App\Livewire\Admin\Users\Index as AdminUsersIndex;
 use App\Livewire\Admin\Reports\Index as AdminReportsIndex;
-use App\Livewire\Reviews\MyReviews;
+use App\Livewire\Booking\Create;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 
@@ -155,10 +155,11 @@ Route::prefix('packages')->name('packages.')->group(function () {
     Route::get('{package}', PackageShow::class)->name('show');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/my-reviews', MyReviews::class)
-        ->name('reviews.my-reviews');
-});
+Route::prefix('reviews')->name('reviews.')->group(function () {
+    Route::get('/', \App\Livewire\Reviews\Index::class)->name('index'); 
+    Route::get('/create/{bookingId}', \App\Livewire\Reviews\Create::class)->name('create');
+    });
+
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATED USER (DIPISAH JADI 2 GROUP)

@@ -20,6 +20,12 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
+            $table->foreignId('mountain_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+
             $table->enum('booking_type', ['equipment', 'package', 'both']);
 
             $table->date('tanggal_mulai');

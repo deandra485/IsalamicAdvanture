@@ -3,79 +3,182 @@
 namespace App\Livewire\Admin\Reviews;
 
 use App\Models\Review;
-use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 
-#[Layout('layouts.admin')]
+#[layout('layouts.admin')]
 class Index extends Component
 {
     use WithPagination;
 
     public $search = '';
-    public $statusFilter = 'all'; // all, approved, pending
+    public $filterStatus = 'all'; // all, approved, pending
+    public $filterRating = 'all'; // all, 1, 2, 3, 4, 5
+    public $selectedReview = null;
+    public $showDetailModal = false;
+    public $showDeleteModal = false;
+    public $deleteReviewId = null;
 
-    // Reset pagination saat search berubah
-    public function updatedSearch()
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'filterStatus' => ['except' => 'all'],
+        'filterRating' => ['except' => 'all'],
+    ];
+
+    public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    // Toggle status Approved/Pending
-    public function toggleStatus($id)
+    public function updatingFilterStatus()
     {
-        $review = Review::find($id);
+        $this->resetPage();
+    }
+
+    public function updatingFilterRating()
+    {
+        $this->resetPage();
+    }
+
+    public function getReviewsProperty()
+    {
+        $query = Review::with(['user', 'mountain', 'booking', 'approvedBy'])
+            ->latest();
+
+        // Filter by search
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('komentar', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('user', function ($q) {
+                        $q->where('name', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('mountain', function ($q) {
+                        $q->where('nama', 'like', '%' . $this->search . '%');
+                    });
+            });
+        }
+
+        // Filter by status
+        if ($this->filterStatus === 'approved') {
+            $query->approved();
+        } elseif ($this->filterStatus === 'pending') {
+            $query->pending();
+        }
+
+        // Filter by rating
+        if ($this->filterRating !== 'all') {
+            $query->where('rating', $this->filterRating);
+        }
+
+        return $query->paginate(10);
+    }
+
+    public function viewDetail($reviewId)
+    {
+        $this->selectedReview = Review::with(['user', 'mountain', 'booking', 'approvedBy'])
+            ->find($reviewId);
+        $this->showDetailModal = true;
+    }
+
+    public function closeDetailModal()
+    {
+        $this->showDetailModal = false;
+        $this->selectedReview = null;
+    }
+
+    public function approveReview($reviewId)
+    {
+        $review = Review::find($reviewId);
         
         if ($review) {
-            $newStatus = !$review->is_approved;
-            
             $review->update([
-                'is_approved' => $newStatus,
-                'approved_by' => $newStatus ? Auth::id() : null
+                'is_approved' => true,
+                'approved_by' => auth()->id(),
             ]);
 
-            $statusText = $newStatus ? 'approved' : 'rejected (pending)';
-            session()->flash('success', "Review successfully {$statusText}.");
+            session()->flash('success', 'Review berhasil disetujui.');
+            
+            if ($this->selectedReview && $this->selectedReview->id === $reviewId) {
+                $this->selectedReview = Review::with(['user', 'mountain', 'booking', 'approvedBy'])
+                    ->find($reviewId);
+            }
         }
     }
 
-    public function delete($id)
+    public function rejectReview($reviewId)
     {
-        $review = Review::find($id);
-
+        $review = Review::find($reviewId);
+        
         if ($review) {
-            $review->delete();
-            session()->flash('success', 'Review deleted successfully.');
+            $review->update([
+                'is_approved' => false,
+                'approved_by' => null,
+            ]);
+
+            session()->flash('success', 'Review berhasil ditolak.');
+            
+            if ($this->selectedReview && $this->selectedReview->id === $reviewId) {
+                $this->selectedReview = Review::with(['user', 'mountain', 'booking', 'approvedBy'])
+                    ->find($reviewId);
+            }
         }
+    }
+
+    public function confirmDelete($reviewId)
+    {
+        $this->deleteReviewId = $reviewId;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteReview()
+    {
+        if ($this->deleteReviewId) {
+            $review = Review::find($this->deleteReviewId);
+            
+            if ($review) {
+                // Delete photos if exist
+                if (!empty($review->photos)) {
+                    foreach ($review->photos as $photo) {
+                        \Storage::disk('public')->delete($photo);
+                    }
+                }
+                
+                $review->delete();
+                session()->flash('success', 'Review berhasil dihapus.');
+            }
+        }
+
+        $this->showDeleteModal = false;
+        $this->deleteReviewId = null;
+        
+        if ($this->showDetailModal) {
+            $this->closeDetailModal();
+        }
+    }
+
+    public function cancelDelete()
+    {
+        $this->showDeleteModal = false;
+        $this->deleteReviewId = null;
+    }
+
+    public function getStatsProperty()
+    {
+        return [
+            'total' => Review::count(),
+            'approved' => Review::approved()->count(),
+            'pending' => Review::pending()->count(),
+            'avg_rating' => round(Review::approved()->avg('rating'), 1),
+        ];
     }
 
     public function render()
     {
-        $reviews = Review::with(['user', 'mountain'])
-            ->when($this->search, function($query) {
-                $query->where(function($q) {
-                    $q->where('komentar', 'like', '%' . $this->search . '%')
-                      ->orWhereHas('user', function($u) {
-                          $u->where('name', 'like', '%' . $this->search . '%');
-                      })
-                      ->orWhereHas('mountain', function($m) {
-                          $m->where('nama_gunung', 'like', '%' . $this->search . '%');
-                      });
-                });
-            })
-            ->when($this->statusFilter !== 'all', function($query) {
-                if ($this->statusFilter === 'approved') {
-                    $query->where('is_approved', true);
-                } else {
-                    $query->where('is_approved', false);
-                }
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
         return view('livewire.admin.reviews.index', [
-            'reviews' => $reviews
+            'reviews' => $this->reviews,
+            'stats' => $this->stats,
         ]);
     }
 }

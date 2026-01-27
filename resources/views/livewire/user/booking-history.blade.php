@@ -70,7 +70,6 @@
                     <div class="p-6 pl-8"> <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6">
                             <div>
                                 <div class="flex items-center gap-3 mb-1">
-                                    <span class="text-xs font-mono text-gray-400">#{{ $booking->kode_booking }}</span>
                                     <span class="px-2.5 py-0.5 rounded-full text-xs font-medium border
                                         {{ $booking->status_booking == 'paid' ? 'bg-green-50 text-green-700 border-green-200' : '' }}
                                         {{ $booking->status_booking == 'pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : '' }}
@@ -82,12 +81,6 @@
                                 <h3>
                                 {{ $booking->package?->nama_paket ?? 'Open trip islamicadvanture' }}
                             </h3>
-
-                            @if($booking->booking_type === 'package' || $booking->booking_type === 'both')
-                                <div class="text-sm text-gray-500">
-                                    {{ $booking->package?->mountain?->nama_gunung ?? '-' }}
-                                </div>
-                            @endif
                             </div>
 
                             <div class="mt-4 lg:mt-0 text-right">
@@ -105,14 +98,21 @@
                                 <p class="text-gray-500 mb-2">Jadwal Perjalanan</p>
                                 <div class="flex items-center text-gray-800 font-medium bg-gray-50 px-3 py-2 rounded-lg w-fit">
                                     <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    {{ \Carbon\Carbon::parse($booking->tanggal_mulai)->format('d M') }} - 
-                                    {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->format('d M Y') }}
+                                    @php
+                                    $mulai = \Carbon\Carbon::parse($booking->tanggal_mulai);
+                                    $selesai = \Carbon\Carbon::parse($booking->tanggal_selesai);
+
+                                    if ($selesai->lt($mulai->copy()->addDays(2))) {
+                                        $selesai = $mulai->copy()->addDays(2);
+                                    }
+                                @endphp
+                                {{ $mulai->format('d M') }} - {{ $selesai->format('d M Y') }}
                                 </div>
                             </div>
                             
                             @if($booking->items->count() > 0)
                             <div class="flex-1">
-                                <p class="text-gray-500 mb-2">Equipment Disewa</p>
+                                <p class="text-gray-500 mb-2">Paket trip dan Equipment</p>
                                 <div class="flex flex-wrap gap-2">
                                     @foreach($booking->items->take(3) as $item)
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
@@ -129,12 +129,38 @@
                             @endif
                         </div>
 
-                        <div class="mt-6 pt-4 border-t border-gray-100 flex flex-wrap gap-3 justify-end">
+                       <div class="mt-6 pt-4 border-t border-gray-100 flex flex-wrap gap-3 justify-end">
                             @if($booking->payment && $booking->payment->status_pembayaran === 'paid')
                                 <button wire:click="downloadInvoice({{ $booking->id }})" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                                     <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     Invoice
                                 </button>
+                            @endif
+
+                            {{-- ✅ TAMBAHKAN TOMBOL REVIEW DI SINI --}}
+                            @if($booking->status_booking === 'completed')
+                                @php
+                                    $hasReview = \App\Models\Review::where('booking_id', $booking->id)
+                                        ->where('user_id', auth()->id())
+                                        ->exists();
+                                @endphp
+                                
+                                @if($hasReview)
+                                    <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg">
+                                        <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Sudah Direview
+                                    </span>
+                                @else
+                                    <a href="{{ route('reviews.create', $booking->id) }}" 
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 border border-transparent rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors shadow-sm">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                        </svg>
+                                        Tulis Review
+                                    </a>
+                                @endif
                             @endif
 
                             @if(in_array($booking->status_booking, ['pending', 'confirmed']))

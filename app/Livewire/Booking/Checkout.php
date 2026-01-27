@@ -86,20 +86,20 @@ class Checkout extends Component
 
             // Create Booking
             $booking = Booking::create([
-    'user_id' => auth()->id(),
-    'booking_type' => $hasEquipment ? 'equipment' : 'package',
+            'user_id' => auth()->id(),
+            'booking_type' => $hasEquipment ? 'equipment' : 'package',
 
-    'tanggal_mulai' => $tanggalMulai,
-    'tanggal_selesai' => $tanggalSelesai,
-    'durasi_hari' => $durasi,
+            'tanggal_mulai' => $tanggalMulai,
+            'tanggal_selesai' => $tanggalSelesai,
+            'durasi_hari' => $durasi,
 
-    'total_biaya' => collect($this->cart)->sum('subtotal'),
-    'status_booking' => 'pending',
-    'metode_pengambilan' => $this->metodePengambilan,
-    'alamat_pengiriman' => $this->metodePengambilan === 'delivery'
-        ? $this->alamatPengiriman
-        : null,
-    'catatan_customer' => $this->catatanCustomer,
+            'total_biaya' => collect($this->cart)->sum('subtotal'),
+            'status_booking' => 'pending',
+            'metode_pengambilan' => $this->metodePengambilan,
+            'alamat_pengiriman' => $this->metodePengambilan === 'delivery'
+                ? $this->alamatPengiriman
+                : null,
+            'catatan_customer' => $this->catatanCustomer,
 ]);
 
 

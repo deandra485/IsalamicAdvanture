@@ -18,6 +18,7 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'package_id',
+        'mountain_id',
         'booking_type',
         'tanggal_mulai',
         'tanggal_selesai',
@@ -87,6 +88,12 @@ class Booking extends Model
     {
         return $this->hasOne(Review::class);
     }
+
+    public function mountain()
+    {
+        return $this->belongsTo(Mountain::class);
+    }
+
 
     /**
      * ===============================
