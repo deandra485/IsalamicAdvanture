@@ -3,11 +3,9 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Livewire\Component;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 
 #[Layout('layouts.guest')]
 class Register extends Component
@@ -18,19 +16,14 @@ class Register extends Component
     public $password_confirmation = '';
     public $no_telepon = '';
     public $alamat = '';
-    public $recaptcha_token = '';
 
-    protected function rules()
-    {
-        return [
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-            'no_telepon' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
-            'recaptcha_token' => 'required',
-        ];
-    }
+    protected $rules = [
+        'name' => 'required|string|max:100',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6|confirmed',
+        'no_telepon' => 'nullable|string|max:20',
+        'alamat' => 'nullable|string',
+    ];
 
     protected $messages = [
         'name.required' => 'Nama wajib diisi',
@@ -40,70 +33,26 @@ class Register extends Component
         'password.required' => 'Password wajib diisi',
         'password.min' => 'Password minimal 6 karakter',
         'password.confirmed' => 'Konfirmasi password tidak cocok',
-        'recaptcha_token.required' => 'Silakan verifikasi bahwa Anda bukan robot.',
     ];
 
     public function register()
     {
-        // Validasi basic dulu
-        $validated = $this->validate();
+        $this->validate();
 
-        // Verifikasi reCAPTCHA
-        try {
-            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                'secret' => config('services.recaptcha.secret_key'),
-                'response' => $this->recaptcha_token,
-                'remoteip' => request()->ip()
-            ]);
+        $user = User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+            'no_telepon' => $this->no_telepon,
+            'alamat' => $this->alamat,
+            'role' => 'customer',
+            'is_active' => true,
+        ]);
 
-            $result = $response->json();
+        Auth::login($user);
 
-            // Debug: Log hasil verifikasi (hapus setelah testing)
-            Log::info('reCAPTCHA verification result:', $result);
-
-            if (!isset($result['success']) || !$result['success']) {
-                $errorCodes = $result['error-codes'] ?? ['unknown-error'];
-                
-                $this->addError('recaptcha_token', 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.');
-                
-                // Log error untuk debugging
-                Log::error('reCAPTCHA verification failed:', [
-                    'error_codes' => $errorCodes,
-                    'token' => $this->recaptcha_token,
-                    'result' => $result
-                ]);
-                
-                return;
-            }
-
-        } catch (\Exception $e) {
-            $this->addError('recaptcha_token', 'Terjadi kesalahan saat verifikasi. Silakan coba lagi.');
-            Log::error('reCAPTCHA exception:', ['message' => $e->getMessage()]);
-            return;
-        }
-
-        // Jika reCAPTCHA valid, buat user
-        try {
-            $user = User::create([
-                'name' => $this->name,
-                'email' => $this->email,
-                'password' => Hash::make($this->password),
-                'no_telepon' => $this->no_telepon,
-                'alamat' => $this->alamat,
-                'role' => 'customer',
-                'is_active' => true,
-            ]);
-
-            Auth::login($user);
-
-            session()->flash('success', 'Registrasi berhasil! Selamat datang di IslamicAdvanture.');
-            return redirect()->route('home');
-
-        } catch (\Exception $e) {
-            $this->addError('email', 'Terjadi kesalahan saat membuat akun. Silakan coba lagi.');
-            Log::error('User creation failed:', ['message' => $e->getMessage()]);
-            return;
-        }
+        session()->flash('success', 'Registrasi berhasil! Selamat datang di IslamicAdvanture.');
+        return redirect()->route('home');
     }
 
     public function render()
