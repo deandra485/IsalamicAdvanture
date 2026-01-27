@@ -188,7 +188,13 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
     function onRecaptchaSuccess(token) {
+        // Method 1: Livewire wire:model
         @this.set('recaptcha_token', token);
+        
+        // Method 2: Dispatch event (backup)
+        window.Livewire.dispatch('recaptchaVerified', { token: token });
+        
+        console.log('reCAPTCHA token:', token); // Debug
     }
 </script>
 @endpush
