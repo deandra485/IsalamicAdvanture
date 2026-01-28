@@ -25,14 +25,12 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /
           exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/bootstrap/**
-            **/database/**
-            **/public/**
-            **/storage/**
-            **/stubs/**
-            **/tests/**
-            **/vendor/**
-            **.env
+              .git/
+              .git/**
+              node_modules/
+              vendor/
+              storage/
+              tests/
+              bootstrap/
+              database/
+              .env
