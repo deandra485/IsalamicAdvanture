@@ -62,7 +62,7 @@
                                 </div>
                             </label>
 
-                            <label class="relative cursor-pointer group">
+                            {{-- <label class="relative cursor-pointer group">
                                 <input type="radio" wire:model.live="metodePengambilan" value="delivery" class="peer sr-only">
                                 <div class="p-4 rounded-xl border-2 transition-all duration-200 hover:border-blue-200 peer-checked:border-blue-600 peer-checked:bg-blue-50/50 bg-white border-gray-200">
                                     <div class="flex items-start justify-between">
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </label>
+                            </label> --}}
                         </div>
 
                         @if($metodePengambilan === 'delivery')
