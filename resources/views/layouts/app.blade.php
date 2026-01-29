@@ -9,7 +9,7 @@
 
         <meta name="description" content="@yield('description', 'OpenTrip Islamic Advanturer menyediakan paket trip naik gunung, wisata alam, dan perjalanan halal yang aman, nyaman, dan terpercaya untuk para muslim traveler di Indonesia.')">
 
-        <meta name="keywords" content="open trip gunung, wisata halal, trip islami, pendakian gunung, travel syariah, open trip indonesia">
+        <meta name="keywords" content="open trip gunung, open trip terpecaya, trip islami, pendakian gunung, open trip murah, open trip indonesia">
 
         <meta name="robots" content="index, follow">
 
