@@ -16,7 +16,7 @@
                         
                     <div class="flex flex-col">
                         <span class="text-xl font-bold tracking-tight text-gray-900">
-                            Islamic<span class="text-primary-600">Adventure</span>
+                            Islamic<span class="text-primary-600">Adventurer</span>
                         </span>
                     </div> 
                 </a>

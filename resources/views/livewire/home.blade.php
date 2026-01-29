@@ -246,7 +246,7 @@
             </h2>
             
             <div class="flex flex-col items-center justify-center gap-1">
-                <p class="text-xl text-white font-semibold">Founder Islamic Advanturer</p>
+                <p class="text-xl text-white font-semibold">Founder Islamic Adventurer</p>
                 <p class="text-sm text-slate-400 uppercase tracking-widest">Open Trip</p>
             </div>
 
@@ -264,7 +264,7 @@
     <section class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Mengapa IslamicAdvanture?</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Mengapa IslamicAdventurer?</h2>
                 <p class="text-lg text-slate-600">Kami memberikan standar baru dalam penyewaan alat outdoor.</p>
             </div>
 
