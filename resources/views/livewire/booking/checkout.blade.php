@@ -51,8 +51,8 @@
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                             </div>
                                             <div>
-                                                <h3 class="font-bold text-gray-900">Pickup di Toko</h3>
-                                                <p class="text-xs text-gray-500">Ambil barang langsung di lokasi</p>
+                                                <h3 class="font-bold text-gray-900">Ambil Langsung</h3>
+                                                <p class="text-xs text-gray-500">Ambil barang langsung di lokasi basecamp IslamicAdventurer</p>
                                             </div>
                                         </div>
                                         <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-blue-600 peer-checked:bg-blue-600 flex items-center justify-center mt-1">
@@ -62,7 +62,7 @@
                                 </div>
                             </label>
 
-                            {{-- <label class="relative cursor-pointer group">
+                            <label class="relative cursor-pointer group">
                                 <input type="radio" wire:model.live="metodePengambilan" value="delivery" class="peer sr-only">
                                 <div class="p-4 rounded-xl border-2 transition-all duration-200 hover:border-blue-200 peer-checked:border-blue-600 peer-checked:bg-blue-50/50 bg-white border-gray-200">
                                     <div class="flex items-start justify-between">
@@ -71,8 +71,8 @@
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v9h1m8-9h2.414a1 1 0 00.707.293l2.586 2.586a1 1 0 01.293.707V16h-1m-4-3l2.293 2.293c.63.63.184 1.707-.707 1.707H13"></path></svg>
                                             </div>
                                             <div>
-                                                <h3 class="font-bold text-gray-900">Delivery</h3>
-                                                <p class="text-xs text-gray-500">Diantar kurir ke alamat Anda</p>
+                                                <h3 class="font-bold text-gray-900">Dibawa Langsung</h3>
+                                                <p class="text-xs text-gray-500">Dibawa langsung oleh team IslamicAdventurer</p>
                                             </div>
                                         </div>
                                         <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-blue-600 peer-checked:bg-blue-600 flex items-center justify-center mt-1">
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </label> --}}
+                            </label>
                         </div>
 
                         @if($metodePengambilan === 'delivery')
