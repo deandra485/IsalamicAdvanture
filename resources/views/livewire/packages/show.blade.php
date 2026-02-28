@@ -100,6 +100,39 @@
                 </h3>
                 
                 <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    {{-- ======== LOGIKA PARSING DESKRIPSI ======== --}}
+                    @php
+                        $deskripsi = $package->deskripsi ?? '';
+                        
+                        // Memisahkan Include dan Exclude berdasarkan kata "EXCLUDE:"
+                        $parts = explode('EXCLUDE:', $deskripsi);
+                        
+                        $includeText = str_replace('INCLUDE:', '', $parts[0] ?? '');
+                        $excludeText = $parts[1] ?? '';
+                        
+                        // Memecah menjadi array berdasarkan baris baru (\n)
+                        $includeListRaw = explode("\n", $includeText);
+                        $excludeListRaw = explode("\n", $excludeText);
+                        
+                        // Membersihkan spasi kosong dan tanda hubung/bullet di awal
+                        $includeList = [];
+                        foreach($includeListRaw as $item) {
+                            $cleanItem = trim(ltrim(trim($item), '- •'));
+                            if(!empty($cleanItem)) {
+                                $includeList[] = $cleanItem;
+                            }
+                        }
+
+                        $excludeList = [];
+                        foreach($excludeListRaw as $item) {
+                            $cleanItem = trim(ltrim(trim($item), '- •'));
+                            if(!empty($cleanItem)) {
+                                $excludeList[] = $cleanItem;
+                            }
+                        }
+                    @endphp
+                    {{-- ========================================== --}}
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         
                         <div>
@@ -108,38 +141,14 @@
                                 Fasilitas (Terima Beres)
                             </h4>
                             <ul class="space-y-3">
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Transportasi Elf/Bus AC (PP)</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Driver, BBM, Tol & Parkir</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Simaksi Pendakian & E-Ticket</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Rumah Singgah / Homestay</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Porter Tenda & Logistik Kelompok</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Pemandu (Guide) & Sweeper</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Makan 2x Selama Pendakian</span>
-                                </li>
-                                <li class="flex items-start text-gray-600 text-sm">
-                                    <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>Dokumentasi Foto/Video</span>
-                                </li>
+                                @forelse ($includeList as $item)
+                                    <li class="flex items-start text-gray-600 text-sm">
+                                        <svg class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span>{{ $item }}</span>
+                                    </li>
+                                @empty
+                                    <li class="text-sm text-gray-400 italic">Belum ada data fasilitas.</li>
+                                @endforelse
                             </ul>
                         </div>
 
@@ -149,18 +158,14 @@
                                 Exclude (Tidak Termasuk)
                             </h4>
                             <ul class="space-y-3">
-                                <li class="flex items-start text-gray-500 text-sm">
-                                    <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span>Perlengkapan Pribadi (Tas, Sepatu, Jaket)</span>
-                                </li>
-                                <li class="flex items-start text-gray-500 text-sm">
-                                    <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span>Sleeping Bag (Bisa sewa terpisah)</span>
-                                </li>
-                                <li class="flex items-start text-gray-500 text-sm">
-                                    <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <span>Cemilan Pribadi</span>
-                                </li>
+                                @forelse ($excludeList as $item)
+                                    <li class="flex items-start text-gray-500 text-sm">
+                                        <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>{{ $item }}</span>
+                                    </li>
+                                @empty
+                                    <li class="text-sm text-gray-400 italic">Belum ada data exclude.</li>
+                                @endforelse
                             </ul>
                         </div>
 
@@ -235,7 +240,7 @@
                             @enderror
 
                             {{-- Preview Tanggal Selesai (Otomatis muncul kalau tanggalMulai diisi) --}}
-                            @if($tanggalSelesai)
+                            @if($tanggalSelesai ?? false)
                                 <div class="mt-3 p-3 bg-emerald-50 rounded-lg border border-emerald-100 flex items-center justify-between">
                                     <div class="text-xs text-emerald-600">
                                         <span class="block font-semibold">Selesai Trip:</span>
@@ -254,13 +259,13 @@
                             <div class="flex items-center justify-between bg-gray-50 rounded-2xl p-2 border border-gray-200">
                                 <button 
                                     wire:click="decrementQuantity"
-                                    class="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm text-gray-600 hover:text-red-500 hover:bg-red-50 transition-colors {{ $quantity <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                    {{ $quantity <= 1 ? 'disabled' : '' }}
+                                    class="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm text-gray-600 hover:text-red-500 hover:bg-red-50 transition-colors {{ ($quantity ?? 1) <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                    {{ ($quantity ?? 1) <= 1 ? 'disabled' : '' }}
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
                                 </button>
                                 
-                                <span class="text-xl font-bold text-gray-900 w-12 text-center">{{ $quantity }}</span>
+                                <span class="text-xl font-bold text-gray-900 w-12 text-center">{{ $quantity ?? 1 }}</span>
                                 
                                 <button 
                                     wire:click="incrementQuantity"
@@ -274,7 +279,7 @@
                         <div class="flex justify-between items-center py-4 border-t border-dashed border-gray-200">
                             <span class="text-gray-600 font-medium">Total Pembayaran</span>
                             <span class="text-xl font-bold text-gray-900">
-                                Rp {{ number_format($package->harga_paket * $quantity, 0, ',', '.') }}
+                                Rp {{ number_format($package->harga_paket * ($quantity ?? 1), 0, ',', '.') }}
                             </span>
                         </div>
 
