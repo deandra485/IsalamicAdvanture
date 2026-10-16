@@ -14,11 +14,15 @@ use App\Models\User;
 class BookingShow extends Component
 {
     public Booking $booking;
-    public User $user;
 
     public function mount(Booking $booking)
     {
-        $this->booking = $booking;
+        // Security: pastikan booking milik user yang login
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak diizinkan mengakses booking ini.');
+        }
+
+        $this->booking = $booking->load(['user', 'package.mountain', 'items.equipment', 'payment', 'review']);
     }
 
     /**

@@ -1,3 +1,46 @@
+{{-- ═══ SEO META: DETAIL PERALATAN ═══ --}}
+@section('title', 'Sewa ' . $equipment->nama_peralatan . ' | ' . ($equipment->category->nama_kategori ?? '') . ' - Islamic Adventurer')
+@section('description', 'Sewa ' . $equipment->nama_peralatan . ' ' . ($equipment->merk ?? '') . ' kondisi ' . $equipment->kondisi . '. Harga Rp ' . number_format($equipment->harga_sewa_perhari, 0, ',', '.') . '/hari. Stok tersedia, pengiriman cepat. Booking sekarang!')
+@section('keywords', 'sewa ' . $equipment->nama_peralatan . ', rental ' . $equipment->nama_peralatan . ', ' . ($equipment->category->nama_kategori ?? '') . ' gunung, harga sewa ' . $equipment->nama_peralatan)
+@section('og_type', 'product')
+
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Sewa {{ $equipment->nama_peralatan }}",
+    "description": "{{ Str::limit($equipment->deskripsi ?? 'Peralatan mendaki berkualitas', 200) }}",
+    "url": "{{ url()->current() }}",
+    @if($equipment->primaryImage)
+    "image": "{{ Storage::url($equipment->primaryImage->image_url) }}",
+    @endif
+    "brand": {
+        "@type": "Brand",
+        "name": "{{ $equipment->merk ?? 'Islamic Adventurer' }}"
+    },
+    "offers": {
+        "@type": "Offer",
+        "price": "{{ $equipment->harga_sewa_perhari }}",
+        "priceCurrency": "IDR",
+        "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "{{ $equipment->harga_sewa_perhari }}",
+            "priceCurrency": "IDR",
+            "unitText": "Hari"
+        },
+        "availability": "{{ $equipment->stok_tersedia > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' }}",
+        "url": "{{ url()->current() }}"
+    },
+    "additionalProperty": {
+        "@type": "PropertyValue",
+        "name": "Kondisi",
+        "value": "{{ ucfirst($equipment->kondisi) }}"
+    }
+}
+</script>
+@endpush
+
 <div class="min-h-screen bg-slate-50 py-10 font-sans text-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

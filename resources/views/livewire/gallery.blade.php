@@ -1,3 +1,8 @@
+{{-- ═══ SEO META: GALERI ═══ --}}
+@section('title', 'Galeri Foto Pendakian & Wisata Alam | Islamic Adventurer')
+@section('description', 'Lihat koleksi foto-foto terbaik perjalanan open trip pendakian gunung bersama Islamic Adventurer. Abadikan setiap momen petualangan alam Indonesia.')
+@section('keywords', 'galeri foto pendakian, foto gunung indonesia, foto open trip, wisata alam foto, dokumentasi pendakian')
+
 <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">

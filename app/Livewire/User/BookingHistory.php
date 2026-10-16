@@ -48,7 +48,8 @@ class BookingHistory extends Component
         )
         ->when($this->searchTerm, function ($q) {
             $q->where(function ($sub) {
-                $sub->where('kode_booking', 'like', '%' . $this->searchTerm . '%')
+                // Search by booking ID
+                $sub->where('id', 'like', '%' . $this->searchTerm . '%')
                     ->orWhereHas('package', fn ($p) =>
                         $p->where('nama_paket', 'like', '%' . $this->searchTerm . '%')
                     )
@@ -118,7 +119,7 @@ class BookingHistory extends Component
             // Update booking status
             $this->selectedBooking->update([
                 'status_booking' => 'cancelled',
-                'catatan' => 'Dibatalkan oleh user: ' . $this->cancelReason
+                'catatan_admin'  => 'Dibatalkan oleh user: ' . $this->cancelReason,
             ]);
 
             // Update payment status if exists
@@ -129,9 +130,10 @@ class BookingHistory extends Component
             }
 
             // Return stock for equipment bookings
-            foreach ($this->selectedBooking->bookingItems as $item) {
-                $equipment = $item->equipment;
-                $equipment->increment('stok_tersedia', $item->quantity);
+            foreach ($this->selectedBooking->items as $item) {
+                if ($item->equipment) {
+                    $item->equipment->increment('stok_tersedia', $item->quantity);
+                }
             }
 
             session()->flash('success', 'Booking berhasil dibatalkan.');
@@ -169,7 +171,7 @@ class BookingHistory extends Component
 
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
-        }, 'invoice-' . $booking->kode_booking . '.pdf');
+        }, 'invoice-' . $booking->booking_code . '.pdf');
     }
 
     public function getStatusBadgeClass($status)

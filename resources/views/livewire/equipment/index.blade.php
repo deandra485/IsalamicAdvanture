@@ -1,3 +1,8 @@
+{{-- ═══ SEO META: DAFTAR PERALATAN ═══ --}}
+@section('title', 'Sewa Peralatan Mendaki & Camping | Harga Murah - Islamic Adventurer')
+@section('description', 'Sewa peralatan mendaki gunung berkualitas: tenda, carrier, sleeping bag, sepatu gunung, dan lainnya. Kondisi bersih, terawat, harga terjangkau, ready stock.')
+@section('keywords', 'sewa peralatan mendaki, rental alat camping, sewa tenda gunung, sewa carrier, sewa sleeping bag, peralatan outdoor murah')
+
 <div class="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
     
     <div class="bg-gradient-to-r from-emerald-900 to-emerald-700 pt-16 pb-20 px-4 sm:px-6 lg:px-8 shadow-lg">

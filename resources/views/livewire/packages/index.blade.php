@@ -1,3 +1,8 @@
+{{-- ═══ SEO META: DAFTAR PAKET ═══ --}}
+@section('title', 'Paket Open Trip Gunung Indonesia | Harga Terjangkau - Islamic Adventurer')
+@section('description', 'Pilih paket open trip pendakian gunung terbaik di Indonesia. Harga mulai ratusan ribu, peralatan lengkap, pemandu berlisensi, cocok untuk pemula hingga expert.')
+@section('keywords', 'paket open trip gunung, harga open trip, paket pendakian murah, trip gunung indonesia, wisata pendakian, paket hiking')
+
 <div class="container mx-auto px-4 py-12 max-w-7xl">
     <div class="text-center mb-12">
         <span class="text-emerald-600 font-semibold tracking-wider uppercase text-sm mb-2 block">Petualangan Menanti</span>

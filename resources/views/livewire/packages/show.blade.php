@@ -1,3 +1,54 @@
+{{-- ═══ SEO META: DETAIL PAKET ═══ --}}
+@section('title', $package->nama_paket . ' | Paket Open Trip ' . ($package->mountain->nama_gunung ?? '') . ' - Islamic Adventurer')
+@section('description', 'Paket open trip ' . $package->nama_paket . ' ke ' . ($package->mountain->nama_gunung ?? 'gunung') . ' selama ' . $package->durasi_hari . ' hari. Harga mulai Rp ' . number_format($package->harga_paket, 0, ',', '.') . '/pax. Peralatan lengkap dan pemandu berpengalaman.')
+@section('og_type', 'product')
+@if($package->mountain->image_url ?? false)
+@section('og_image', asset('storage/' . $package->mountain->image_url))
+@endif
+
+{{-- JSON-LD Product Schema untuk harga tampil di Google --}}
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "{{ $package->nama_paket }}",
+    "description": "Paket open trip {{ $package->durasi_hari }} hari ke {{ $package->mountain->nama_gunung ?? '' }}. Termasuk peralatan camping dan pemandu berpengalaman.",
+    "url": "{{ url()->current() }}",
+    @if($package->mountain->image_url ?? false)
+    "image": "{{ asset('storage/' . $package->mountain->image_url) }}",
+    @endif
+    "brand": {
+        "@type": "Brand",
+        "name": "Islamic Adventurer"
+    },
+    "offers": {
+        "@type": "Offer",
+        "price": "{{ $package->harga_paket }}",
+        "priceCurrency": "IDR",
+        "availability": "https://schema.org/InStock",
+        "url": "{{ url()->current() }}",
+        "seller": {
+            "@type": "Organization",
+            "name": "Islamic Adventurer"
+        }
+    },
+    "additionalProperty": [
+        {
+            "@type": "PropertyValue",
+            "name": "Durasi",
+            "value": "{{ $package->durasi_hari }} Hari"
+        },
+        {
+            "@type": "PropertyValue",
+            "name": "Destinasi",
+            "value": "{{ $package->mountain->nama_gunung ?? '' }}, {{ $package->mountain->lokasi ?? '' }}"
+        }
+    ]
+}
+</script>
+@endpush
+
 <div class="container mx-auto px-4 py-8 max-w-7xl">
     <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">

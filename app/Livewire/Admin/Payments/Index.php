@@ -53,7 +53,7 @@ class Index extends Component
                       ->orWhere('email', 'like', "%{$this->search}%");
                 })
                 ->orWhereHas('booking', function($q) {
-                    $q->where('kode_booking', 'like', "%{$this->search}%");
+                    $q->where('id', 'like', "%{$this->search}%");
                 });
             })
             ->when($this->dateFrom, fn($q) => 

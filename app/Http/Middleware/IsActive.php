@@ -10,8 +10,17 @@ class IsActive
 {
     public function handle(Request $request, Closure $next)
     {
-        if (! Auth::check() || ! Auth::user()->is_active) {
-            abort(403);
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        if (! Auth::user()->is_active) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')
+                ->with('error', 'Akun Anda dinonaktifkan. Silakan hubungi admin untuk informasi lebih lanjut.');
         }
 
         return $next($request);

@@ -245,7 +245,7 @@ class Show extends Component
             return null;
         }
 
-        $filename = 'bukti_pembayaran_' . $this->payment->booking->kode_booking . '_' . now()->format('Ymd_His') . '.' . pathinfo($this->payment->bukti_pembayaran_url, PATHINFO_EXTENSION);
+        $filename = 'bukti_pembayaran_' . $this->payment->booking->booking_code . '_' . now()->format('Ymd_His') . '.' . pathinfo($this->payment->bukti_pembayaran_url, PATHINFO_EXTENSION);
 
         return response()->download(
             storage_path('app/public/' . $this->payment->bukti_pembayaran_url),

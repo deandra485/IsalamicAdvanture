@@ -42,7 +42,14 @@ class Create extends Component
             ->where('id', $bookingId)
             ->where('user_id', auth()->id())
             ->where('status_booking', 'completed')
-            ->firstOrFail();
+            ->first();
+
+        // Jika booking tidak ditemukan (bukan milik user, belum selesai, atau tidak ada)
+        if (! $this->booking) {
+            session()->flash('error', 'Booking tidak ditemukan atau belum berstatus selesai. Anda hanya bisa memberi review untuk booking yang sudah completed.');
+            $this->redirectRoute('user.bookings.history');
+            return;
+        }
 
         // Cek apakah sudah ada review
         $existingReview = Review::where('booking_id', $bookingId)
@@ -51,7 +58,8 @@ class Create extends Component
 
         if ($existingReview) {
             session()->flash('error', 'Anda sudah memberikan review untuk booking ini.');
-            return redirect()->route('user.bookings.history');
+            $this->redirectRoute('user.bookings.history');
+            return;
         }
     }
 

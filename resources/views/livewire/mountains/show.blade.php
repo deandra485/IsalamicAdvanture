@@ -1,3 +1,52 @@
+{{-- ═══ SEO META: HALAMAN DETAIL GUNUNG ═══ --}}
+@section('title', $mountain->nama_gunung . ' | ' . $mountain->ketinggian . ' mdpl - Islamic Adventurer')
+@section('description', 'Pendakian ' . $mountain->nama_gunung . ' setinggi ' . number_format($mountain->ketinggian) . ' mdpl di ' . $mountain->lokasi . '. Tingkat kesulitan: ' . $mountain->tingkat_kesulitan . '. Temukan jalur dan paket open trip terbaik bersama Islamic Adventurer.')
+@section('keywords', 'pendakian ' . $mountain->nama_gunung . ', open trip ' . $mountain->nama_gunung . ', jalur ' . $mountain->nama_gunung . ', ketinggian gunung, wisata alam ' . $mountain->lokasi)
+@section('og_type', 'article')
+@if($mountain->image_url)
+@section('og_image', Storage::url($mountain->image_url))
+@endif
+
+{{-- JSON-LD Structured Data untuk rich results Google --}}
+@push('structured_data')
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    "name": "{{ $mountain->nama_gunung }}",
+    "description": "{{ Str::limit($mountain->deskripsi, 200) }}",
+    "url": "{{ url()->current() }}",
+    @if($mountain->image_url)
+    "image": "{{ Storage::url($mountain->image_url) }}",
+    @endif
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{{ $mountain->lokasi }}",
+        "addressCountry": "ID"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "elevation": "{{ $mountain->ketinggian }} m"
+    },
+    @if($mountain->reviews_avg_rating)
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ number_format($mountain->reviews_avg_rating, 1) }}",
+        "reviewCount": "{{ $mountain->reviews_count }}",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    @endif
+    "touristType": "Pendaki Gunung",
+    "additionalProperty": {
+        "@type": "PropertyValue",
+        "name": "Tingkat Kesulitan",
+        "value": "{{ ucfirst($mountain->tingkat_kesulitan) }}"
+    }
+}
+</script>
+@endpush
+
 <div class="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
     
     <section class="relative h-[60vh] min-h-[500px] group">

@@ -1,3 +1,8 @@
+{{-- ═══ SEO META: DAFTAR GUNUNG ═══ --}}
+@section('title', 'Daftar Gunung di Indonesia | Open Trip Pendakian - Islamic Adventurer')
+@section('description', 'Temukan berbagai destinasi gunung terbaik di Indonesia. Dari gunung pemula hingga ekstrem, kami sediakan paket open trip dengan pemandu berpengalaman.')
+@section('keywords', 'daftar gunung indonesia, gunung untuk pemula, gunung tinggi indonesia, open trip gunung, pendakian gunung indonesia, wisata alam')
+
 <div class="min-h-screen bg-slate-50 font-sans text-slate-900">
     <div class="fixed inset-0 z-0 pointer-events-none">
         <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-emerald-100/50 rounded-full blur-3xl"></div>

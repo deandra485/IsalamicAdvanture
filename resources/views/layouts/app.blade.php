@@ -1,39 +1,96 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', 'Islamic Advanturer | Open Trip Gunung & Wisata Halal Terpercaya')</title>
+        {{-- ═══════════════════════════════════════ --}}
+        {{-- SEO: TITLE & META DESCRIPTION           --}}
+        {{-- ═══════════════════════════════════════ --}}
+        @php
+            $seoTitle       = $__env->yieldContent('title', 'Islamic Adventurer | Open Trip Gunung & Wisata Halal Terpercaya');
+            $seoDescription = $__env->yieldContent('description', 'Platform Open Trip terpercaya #1 untuk pendakian gunung, sewa peralatan outdoor, dan wisata halal di Indonesia. Aman, nyaman, dan berkesan.');
+            $seoImage       = $__env->yieldContent('og_image', asset('image/background/islamic.jpeg'));
+            $seoUrl         = url()->current();
+        @endphp
 
-        <meta name="description" content="@yield('description', 'OpenTrip Islamic Advanturer menyediakan paket trip naik gunung, wisata alam, dan perjalanan halal yang aman, nyaman, dan terpercaya untuk para muslim traveler di Indonesia.')">
-
-        <meta name="keywords" content="open trip gunung, open trip terpecaya, trip islami, pendakian gunung, open trip murah, open trip indonesia">
-
+        <title>{{ $seoTitle }}</title>
+        <meta name="description" content="{{ $seoDescription }}">
+        <meta name="keywords" content="@yield('keywords', 'open trip gunung, trip islami, pendakian gunung, sewa peralatan mendaki, open trip indonesia, wisata halal, open trip murah')">
         <meta name="robots" content="index, follow">
+        <meta name="author" content="Islamic Adventurer">
+        <link rel="canonical" href="{{ $seoUrl }}">
 
-        <link rel="canonical" href="{{ url()->current() }}">
+        {{-- ═══════════════════════════════════════ --}}
+        {{-- SEO: OPEN GRAPH (Facebook, WhatsApp)    --}}
+        {{-- ═══════════════════════════════════════ --}}
+        <meta property="og:type"        content="@yield('og_type', 'website')">
+        <meta property="og:url"         content="{{ $seoUrl }}">
+        <meta property="og:title"       content="{{ $seoTitle }}">
+        <meta property="og:description" content="{{ $seoDescription }}">
+        <meta property="og:image"       content="{{ $seoImage }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:site_name"   content="Islamic Adventurer">
+        <meta property="og:locale"      content="id_ID">
 
+        {{-- ═══════════════════════════════════════ --}}
+        {{-- SEO: TWITTER CARD                       --}}
+        {{-- ═══════════════════════════════════════ --}}
+        <meta name="twitter:card"        content="summary_large_image">
+        <meta name="twitter:title"       content="{{ $seoTitle }}">
+        <meta name="twitter:description" content="{{ $seoDescription }}">
+        <meta name="twitter:image"       content="{{ $seoImage }}">
 
+        {{-- ═══════════════════════════════════════ --}}
+        {{-- SEO: JSON-LD STRUCTURED DATA            --}}
+        {{-- ═══════════════════════════════════════ --}}
+        @stack('structured_data')
+
+        {{-- Default Organization Schema (semua halaman) --}}
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "TravelAgency",
+            "name": "Islamic Adventurer",
+            "description": "Platform open trip pendakian gunung dan wisata halal terpercaya di Indonesia",
+            "url": "{{ config('app.url') }}",
+            "logo": "{{ asset('image/favicon/favicon-96x96.png') }}",
+            "image": "{{ asset('image/background/islamic.jpeg') }}",
+            "telephone": "+62",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ID",
+                "addressRegion": "Indonesia"
+            },
+            "sameAs": [],
+            "priceRange": "Rp 100.000 - Rp 5.000.000",
+            "currenciesAccepted": "IDR",
+            "paymentAccepted": "Cash, Transfer Bank, E-Wallet"
+        }
+        </script>
+
+        {{-- ═══════════════════════════════════════ --}}
+        {{-- FAVICON                                  --}}
+        {{-- ═══════════════════════════════════════ --}}
         <link rel="icon" type="image/png" href="{{ asset('image/favicon/favicon-96x96.png') }}" sizes="96x96" />
         <link rel="icon" type="image/svg+xml" href="{{ asset('image/favicon/favicon.svg') }}" />
         <link rel="shortcut icon" href="{{ asset('image/favicon/favicon.ico') }}" />
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('image/favicon/apple-touch-icon.png') }}" />
         <link rel="manifest" href="{{ asset('image/favicon/site.webmanifest') }}" />
 
-        <!-- Fonts -->
+        <!-- Preconnect for performance -->
         <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="dns-prefetch" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             <livewire:layout.navigation />
 
-            <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -48,7 +105,6 @@
                 </form>
             @endif
 
-            <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>

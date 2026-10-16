@@ -117,7 +117,7 @@ Route::middleware('guest')->group(function () {
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
         }
-    });
+    })->name('auth.google.callback');
 });
 
 Route::post('/logout', function () {
@@ -129,10 +129,46 @@ Route::post('/logout', function () {
 
 
 Route::get('/sitemap.xml', function () {
-    return Sitemap::create()
-        ->add('/')
-        ->add('/paket')
-        ->toResponse(request());
+    $sitemap = Sitemap::create()
+        // Halaman Utama
+        ->add(Url::create('/')->setPriority(1.0)->setChangeFrequency('weekly'))
+        ->add(Url::create('/mountains')->setPriority(0.9)->setChangeFrequency('weekly'))
+        ->add(Url::create('/packages')->setPriority(0.9)->setChangeFrequency('weekly'))
+        ->add(Url::create('/equipment')->setPriority(0.8)->setChangeFrequency('weekly'))
+        ->add(Url::create('/gallery')->setPriority(0.7)->setChangeFrequency('monthly'))
+        ->add(Url::create('/reviews')->setPriority(0.6)->setChangeFrequency('weekly'));
+
+    // Semua halaman gunung
+    \App\Models\Mountain::where('is_active', true)->get()->each(function ($mountain) use ($sitemap) {
+        $sitemap->add(
+            Url::create('/mountains/' . $mountain->id)
+                ->setPriority(0.8)
+                ->setChangeFrequency('monthly')
+                ->setLastModificationDate($mountain->updated_at)
+        );
+    });
+
+    // Semua halaman paket
+    \App\Models\Package::where('is_active', true)->get()->each(function ($package) use ($sitemap) {
+        $sitemap->add(
+            Url::create('/packages/' . $package->id)
+                ->setPriority(0.8)
+                ->setChangeFrequency('monthly')
+                ->setLastModificationDate($package->updated_at)
+        );
+    });
+
+    // Semua halaman equipment
+    \App\Models\Equipment::where('is_available', true)->get()->each(function ($equipment) use ($sitemap) {
+        $sitemap->add(
+            Url::create('/equipment/' . $equipment->id)
+                ->setPriority(0.6)
+                ->setChangeFrequency('monthly')
+                ->setLastModificationDate($equipment->updated_at)
+        );
+    });
+
+    return $sitemap->toResponse(request());
 });
 
 /*
@@ -155,10 +191,13 @@ Route::prefix('packages')->name('packages.')->group(function () {
     Route::get('{package}', PackageShow::class)->name('show');
 });
 
-Route::prefix('reviews')->name('reviews.')->group(function () {
-    Route::get('/', \App\Livewire\Reviews\Index::class)->name('index'); 
-    Route::get('/create/{bookingId}', \App\Livewire\Reviews\Create::class)->name('create');
-    });
+// Reviews Index = Public (siapapun bisa lihat review)
+Route::get('/reviews', \App\Livewire\Reviews\Index::class)->name('reviews.index');
+
+// Reviews Create = Auth Only (hanya user login yang bisa buat review)
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::get('/reviews/create/{bookingId}', \App\Livewire\Reviews\Create::class)->name('reviews.create');
+});
 
 /*
 |--------------------------------------------------------------------------

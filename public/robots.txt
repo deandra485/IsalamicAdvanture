@@ -1,3 +1,30 @@
+# ================================================
+# robots.txt — Islamic Adventurer
+# ================================================
+
+# Semua bot: izinkan halaman publik
 User-agent: *
 Allow: /
+Allow: /mountains
+Allow: /packages
+Allow: /equipment
+Allow: /gallery
+Allow: /reviews
+
+# Blokir halaman privat dari Google
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /user
+Disallow: /user/*
+Disallow: /booking
+Disallow: /booking/*
+Disallow: /payment
+Disallow: /payment/*
+Disallow: /cart
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /auth/*
+
+# Arahkan ke sitemap (ganti dengan domain asli setelah deploy)
 Sitemap: https://opentrip.islamicadventurer.com/sitemap.xml
