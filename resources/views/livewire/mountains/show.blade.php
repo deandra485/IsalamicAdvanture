@@ -11,7 +11,7 @@
 @push('structured_data')
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
+    "@@context": "https://schema.org",
     "@type": "TouristAttraction",
     "name": "{{ $mountain->nama_gunung }}",
     "description": "{{ Str::limit($mountain->deskripsi, 200) }}",

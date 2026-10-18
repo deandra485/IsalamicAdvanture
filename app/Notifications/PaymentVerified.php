@@ -26,12 +26,12 @@ class PaymentVerified extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Pembayaran Terverifikasi - SantriFund')
+            ->subject('Pembayaran Terverifikasi - Islamic Adventurer')
             ->greeting('Halo ' . $notifiable->name . '!')
             ->line('Pembayaran Anda telah diverifikasi.')
-            ->line('Booking ID: #' . $this->booking->id)
+            ->line('Nomor Booking: #' . $this->booking->id)
             ->line('Status: ' . ucfirst($this->booking->status_booking))
-            ->action('Lihat Detail', url('/bookings'))
+            ->action('Lihat Detail', route('user.bookings.show', $this->booking))
             ->line('Booking Anda siap diproses!')
             ->line('Terima kasih!');
     }

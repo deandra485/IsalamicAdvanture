@@ -10,7 +10,7 @@
 @push('structured_data')
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
+    "@@context": "https://schema.org",
     "@type": "Product",
     "name": "{{ $package->nama_paket }}",
     "description": "Paket open trip {{ $package->durasi_hari }} hari ke {{ $package->mountain->nama_gunung ?? '' }}. Termasuk peralatan camping dan pemandu berpengalaman.",

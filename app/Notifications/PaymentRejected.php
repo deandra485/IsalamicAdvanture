@@ -27,29 +27,28 @@ class PaymentRejected extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Payment Rejected - Order #' . $this->payment->order->order_number)
-            ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('We regret to inform you that your payment could not be verified.')
-            ->line('Order Number: **' . $this->payment->order->order_number . '**')
-            ->line('Transaction ID: ' . $this->payment->transaction_id)
-            ->line('Amount: Rp ' . number_format($this->payment->amount, 0, ',', '.'))
-            ->line('**Reason:** ' . $this->payment->rejection_reason)
-            ->line('Please submit a new payment with the correct information or contact our support team for assistance.')
-            ->action('Retry Payment', route('orders.show', $this->payment->order))
-            ->line('We apologize for any inconvenience caused.');
+            ->subject('Pembayaran Ditolak - Booking #' . $this->payment->booking->id)
+            ->greeting('Halo ' . $notifiable->name . '!')
+            ->line('Mohon maaf, bukti pembayaran Anda tidak dapat kami verifikasi.')
+            ->line('Nomor Booking: #' . $this->payment->booking->id)
+            ->line('Jumlah: Rp ' . number_format($this->payment->jumlah_bayar, 0, ',', '.'))
+            ->line('Alasan: ' . ($this->payment->catatan ?: '-'))
+            ->line('Silakan upload ulang bukti pembayaran yang benar atau hubungi tim support kami.')
+            ->action('Lihat Booking', route('user.bookings.show', $this->payment->booking))
+            ->line('Terima kasih!');
     }
 
     public function toDatabase($notifiable)
     {
         return [
-            'title' => 'Payment Rejected',
-            'message' => 'Your payment for order #' . $this->payment->order->order_number . ' has been rejected.',
+            'title' => 'Pembayaran Ditolak',
+            'message' => 'Pembayaran untuk booking #' . $this->payment->booking->id . ' ditolak.',
             'type' => 'payment_rejected',
             'payment_id' => $this->payment->id,
-            'order_id' => $this->payment->order_id,
-            'amount' => $this->payment->amount,
-            'reason' => $this->payment->rejection_reason,
-            'action_url' => route('orders.show', $this->payment->order),
+            'booking_id' => $this->payment->booking_id,
+            'amount' => $this->payment->jumlah_bayar,
+            'reason' => $this->payment->catatan,
+            'action_url' => route('user.bookings.show', $this->payment->booking),
         ];
     }
 
@@ -57,9 +56,9 @@ class PaymentRejected extends Notification implements ShouldQueue
     {
         return [
             'payment_id' => $this->payment->id,
-            'order_number' => $this->payment->order->order_number,
-            'amount' => $this->payment->amount,
-            'reason' => $this->payment->rejection_reason,
+            'booking_id' => $this->payment->booking_id,
+            'amount' => $this->payment->jumlah_bayar,
+            'reason' => $this->payment->catatan,
         ];
     }
 }

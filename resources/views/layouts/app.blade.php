@@ -9,15 +9,26 @@
         {{-- SEO: TITLE & META DESCRIPTION           --}}
         {{-- ═══════════════════════════════════════ --}}
         @php
-            $seoTitle       = $__env->yieldContent('title', 'Islamic Adventurer | Open Trip Gunung & Wisata Halal Terpercaya');
-            $seoDescription = $__env->yieldContent('description', 'Platform Open Trip terpercaya #1 untuk pendakian gunung, sewa peralatan outdoor, dan wisata halal di Indonesia. Aman, nyaman, dan berkesan.');
-            $seoImage       = $__env->yieldContent('og_image', asset('image/background/islamic.jpeg'));
+            $host = request()->getSchemeAndHttpHost();
+
+            // PENTING: @section() meng-escape isinya (startSection -> e()) dan
+            // yieldContent() meng-escape default-nya. Jadi nilai di bawah SUDAH
+            // ter-escape sekali -> di-render dengan {!! !!}, bukan {{ }} (dobel).
+            $seoTitle       = $__env->yieldContent('title', 'Islamic Adventurer | Open Trip Gunung & Sewa Peralatan Outdoor');
+            $seoDescription = $__env->yieldContent('description', 'Platform open trip terpercaya untuk pendakian gunung dan sewa peralatan outdoor di Indonesia. Aman, nyaman, dan berkesan.');
+
+            // og_image: jadikan URL absolut memakai host request, supaya gambar
+            // link preview tetap terbaca walau APP_URL di .env masih localhost.
+            $seoImageRaw    = $__env->yieldContent('og_image', 'image/logo.jpeg');
+            $seoImagePath   = preg_replace('#^https?://[^/]+#i', '', $seoImageRaw);
+            $seoImage       = $host . '/' . ltrim($seoImagePath, '/');
+
             $seoUrl         = url()->current();
         @endphp
 
-        <title>{{ $seoTitle }}</title>
-        <meta name="description" content="{{ $seoDescription }}">
-        <meta name="keywords" content="@yield('keywords', 'open trip gunung, trip islami, pendakian gunung, sewa peralatan mendaki, open trip indonesia, wisata halal, open trip murah')">
+        <title>{!! $seoTitle !!}</title>
+        <meta name="description" content="{!! $seoDescription !!}">
+        <meta name="keywords" content="@yield('keywords', 'open trip gunung, trip islami, pendakian gunung, sewa peralatan mendaki, open trip indonesia, open trip murah')">
         <meta name="robots" content="index, follow">
         <meta name="author" content="Islamic Adventurer">
         <link rel="canonical" href="{{ $seoUrl }}">
@@ -27,11 +38,10 @@
         {{-- ═══════════════════════════════════════ --}}
         <meta property="og:type"        content="@yield('og_type', 'website')">
         <meta property="og:url"         content="{{ $seoUrl }}">
-        <meta property="og:title"       content="{{ $seoTitle }}">
-        <meta property="og:description" content="{{ $seoDescription }}">
-        <meta property="og:image"       content="{{ $seoImage }}">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
+        <meta property="og:title"       content="{!! $seoTitle !!}">
+        <meta property="og:description" content="{!! $seoDescription !!}">
+        <meta property="og:image"       content="{!! $seoImage !!}">
+        <meta property="og:image:alt"   content="{!! $seoTitle !!}">
         <meta property="og:site_name"   content="Islamic Adventurer">
         <meta property="og:locale"      content="id_ID">
 
@@ -39,9 +49,9 @@
         {{-- SEO: TWITTER CARD                       --}}
         {{-- ═══════════════════════════════════════ --}}
         <meta name="twitter:card"        content="summary_large_image">
-        <meta name="twitter:title"       content="{{ $seoTitle }}">
-        <meta name="twitter:description" content="{{ $seoDescription }}">
-        <meta name="twitter:image"       content="{{ $seoImage }}">
+        <meta name="twitter:title"       content="{!! $seoTitle !!}">
+        <meta name="twitter:description" content="{!! $seoDescription !!}">
+        <meta name="twitter:image"       content="{!! $seoImage !!}">
 
         {{-- ═══════════════════════════════════════ --}}
         {{-- SEO: JSON-LD STRUCTURED DATA            --}}
@@ -51,13 +61,13 @@
         {{-- Default Organization Schema (semua halaman) --}}
         <script type="application/ld+json">
         {
-            "@context": "https://schema.org",
+            "@@context": "https://schema.org",
             "@type": "TravelAgency",
             "name": "Islamic Adventurer",
-            "description": "Platform open trip pendakian gunung dan wisata halal terpercaya di Indonesia",
-            "url": "{{ config('app.url') }}",
-            "logo": "{{ asset('image/favicon/favicon-96x96.png') }}",
-            "image": "{{ asset('image/background/islamic.jpeg') }}",
+            "description": "Platform open trip pendakian gunung dan sewa peralatan outdoor terpercaya di Indonesia",
+            "url": "{{ rtrim($host, '/') }}/",
+            "logo": "{{ $host }}/image/logo.jpeg",
+            "image": "{{ $host }}/image/background/islamic.jpeg",
             "telephone": "+62",
             "address": {
                 "@type": "PostalAddress",

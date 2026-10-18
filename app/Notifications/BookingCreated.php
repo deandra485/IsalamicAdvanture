@@ -47,7 +47,7 @@ public function toMail($notifiable)
     return $mail
         ->action('Lihat Detail Booking', url('/bookings'))
         ->line('Silakan lakukan pembayaran untuk melanjutkan pesanan Anda.')
-        ->line('Terima kasih telah menggunakan SantriFund!');
+        ->line('Terima kasih telah menggunakan Islamic Adventurer!');
 }
 
 

@@ -27,4 +27,4 @@ Disallow: /forgot-password
 Disallow: /auth/*
 
 # Arahkan ke sitemap (ganti dengan domain asli setelah deploy)
-Sitemap: https://opentrip.islamicadventurer.com/sitemap.xml
+Sitemap: https://trip.islamicadventurer.com/sitemap.xml

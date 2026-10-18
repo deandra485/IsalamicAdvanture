@@ -22,3 +22,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Deploy script — JANGAN commit file ini ke Git!
+deploy.config.ini
+deploy_errors.log
+.deploy_manifest.json

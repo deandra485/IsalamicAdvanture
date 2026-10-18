@@ -28,7 +28,7 @@ class BookingReminder extends Notification
     public function toMail($notifiable)
     {
         $message = (new MailMessage)
-            ->subject('Pengingat Booking - SantriFund')
+            ->subject('Pengingat Booking - Islamic Adventurer')
             ->greeting('Halo ' . $notifiable->name . '!');
 
         if ($this->type === 'pickup') {

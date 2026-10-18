@@ -7,7 +7,7 @@
 @push('structured_data')
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
+    "@@context": "https://schema.org",
     "@type": "Product",
     "name": "Sewa {{ $equipment->nama_peralatan }}",
     "description": "{{ Str::limit($equipment->deskripsi ?? 'Peralatan mendaki berkualitas', 200) }}",

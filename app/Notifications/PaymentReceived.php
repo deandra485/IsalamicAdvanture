@@ -26,7 +26,7 @@ class PaymentReceived extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Bukti Pembayaran Diterima - SantriFund')
+            ->subject('Bukti Pembayaran Diterima - Islamic Adventurer')
             ->greeting('Admin,')
             ->line('Bukti pembayaran baru telah diupload.')
             ->line('Booking ID: #' . $this->booking->id)
