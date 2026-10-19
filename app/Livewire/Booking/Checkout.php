@@ -17,20 +17,14 @@ use Illuminate\Support\Facades\DB;
 class Checkout extends Component
 {
     public $cart = [];
-    public $metodePengambilan = 'pickup';
-    public $alamatPengiriman = '';
     public $catatanCustomer = '';
     public $metodePembayaran = 'transfer_bank';
 
     protected $rules = [
-        'metodePengambilan' => 'required|in:pickup,delivery',
-        'alamatPengiriman' => 'required_if:metodePengambilan,delivery',
         'metodePembayaran' => 'required|in:transfer_bank,e_wallet,cod',
     ];
 
-    protected $messages = [
-        'alamatPengiriman.required_if' => 'Alamat pengiriman wajib diisi untuk metode delivery',
-    ];
+    protected $messages = [];
 
     public function mount()
     {
@@ -40,10 +34,6 @@ class Checkout extends Component
             return redirect()->route('booking.cart');
         }
 
-        // Set default alamat from user
-        if (auth()->user()->alamat) {
-            $this->alamatPengiriman = auth()->user()->alamat;
-        }
     }
 
     public function processCheckout()
@@ -95,10 +85,8 @@ class Checkout extends Component
 
             'total_biaya' => collect($this->cart)->sum('subtotal'),
             'status_booking' => 'pending',
-            'metode_pengambilan' => $this->metodePengambilan,
-            'alamat_pengiriman' => $this->metodePengambilan === 'delivery'
-                ? $this->alamatPengiriman
-                : null,
+            'metode_pengambilan' => 'pickup',
+            'alamat_pengiriman' => null,
             'catatan_customer' => $this->catatanCustomer,
 ]);
 

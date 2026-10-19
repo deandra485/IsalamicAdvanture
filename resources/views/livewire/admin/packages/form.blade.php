@@ -156,7 +156,95 @@
                     </div>
                 </div>
 
-                {{-- Section 3: Equipment Bundle --}}
+                {{-- Section 3: Fasilitas (Include) --}}
+                <div class="mb-8">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-900">Fasilitas <span class="text-emerald-600">(Include / Terima Beres)</span></h3>
+                            <p class="text-xs text-slate-500">Daftar fasilitas yang termasuk dalam paket ini.</p>
+                        </div>
+                        <button
+                            type="button"
+                            wire:click="addFasilitas"
+                            class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-100 transition-colors"
+                        >
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            Tambah Item
+                        </button>
+                    </div>
+
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-2">
+                        @forelse($fasilitasList as $i => $item)
+                            <div class="flex items-center gap-2">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    wire:model="fasilitasList.{{ $i }}"
+                                    placeholder="Contoh: Ojek Pickup (PP)"
+                                    class="flex-1 block rounded-lg border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500 py-2"
+                                >
+                                <button
+                                    type="button"
+                                    wire:click="removeFasilitas({{ $i }})"
+                                    class="rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors flex-shrink-0"
+                                    title="Hapus"
+                                >
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        @empty
+                            <p class="text-sm text-slate-400 italic text-center py-4">Belum ada fasilitas. Klik "Tambah Item" untuk menambahkan.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Section 4: Exclude --}}
+                <div class="mb-8">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-900">Exclude <span class="text-red-500">(Tidak Termasuk)</span></h3>
+                            <p class="text-xs text-slate-500">Daftar item yang tidak termasuk dalam paket ini.</p>
+                        </div>
+                        <button
+                            type="button"
+                            wire:click="addExclude"
+                            class="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100 transition-colors"
+                        >
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            Tambah Item
+                        </button>
+                    </div>
+
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4 space-y-2">
+                        @forelse($excludeList as $i => $item)
+                            <div class="flex items-center gap-2">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    wire:model="excludeList.{{ $i }}"
+                                    placeholder="Contoh: Perlengkapan Pribadi"
+                                    class="flex-1 block rounded-lg border-slate-300 text-sm focus:border-red-500 focus:ring-red-500 py-2"
+                                >
+                                <button
+                                    type="button"
+                                    wire:click="removeExclude({{ $i }})"
+                                    class="rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors flex-shrink-0"
+                                    title="Hapus"
+                                >
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        @empty
+                            <p class="text-sm text-slate-400 italic text-center py-4">Belum ada item exclude. Klik "Tambah Item" untuk menambahkan.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Section 5: Equipment Bundle --}}
                 <div>
                     <div class="mb-4 flex items-center justify-between">
                         <div>

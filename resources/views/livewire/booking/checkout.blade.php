@@ -12,7 +12,7 @@
                 <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-blue-600 mx-4"></div>
                 <div class="flex items-center text-blue-600 relative">
                     <div class="rounded-full transition duration-500 ease-in-out h-10 w-10 py-3 border-2 border-blue-600 bg-blue-600 text-white flex items-center justify-center font-bold">2</div>
-                    <div class="absolute top-0 -ml-10 text-center mt-12 w-32 text-xs font-medium uppercase text-blue-600">Pengiriman & Bayar</div>
+                    <div class="absolute top-0 -ml-10 text-center mt-12 w-32 text-xs font-medium uppercase text-blue-600">Pembayaran</div>
                 </div>
                 <div class="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-200 mx-4"></div>
                 <div class="flex items-center text-gray-400 relative">
@@ -35,80 +35,6 @@
                     
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="p-2 bg-blue-50 rounded-lg text-blue-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            </div>
-                            <h2 class="text-xl font-bold text-gray-900">Metode Pengambilan</h2>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" wire:model.live="metodePengambilan" value="pickup" class="peer sr-only">
-                                <div class="p-4 rounded-xl border-2 transition-all duration-200 hover:border-blue-200 peer-checked:border-blue-600 peer-checked:bg-blue-50/50 bg-white border-gray-200">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center peer-checked:bg-blue-100 peer-checked:text-blue-600 text-gray-500">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                            </div>
-                                            <div>
-                                                <h3 class="font-bold text-gray-900">Ambil Langsung</h3>
-                                                <p class="text-xs text-gray-500">Ambil barang langsung di lokasi basecamp IslamicAdventurer</p>
-                                            </div>
-                                        </div>
-                                        <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-blue-600 peer-checked:bg-blue-600 flex items-center justify-center mt-1">
-                                            <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" wire:model.live="metodePengambilan" value="delivery" class="peer sr-only">
-                                <div class="p-4 rounded-xl border-2 transition-all duration-200 hover:border-blue-200 peer-checked:border-blue-600 peer-checked:bg-blue-50/50 bg-white border-gray-200">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center peer-checked:bg-blue-100 peer-checked:text-blue-600 text-gray-500">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v9h1m8-9h2.414a1 1 0 00.707.293l2.586 2.586a1 1 0 01.293.707V16h-1m-4-3l2.293 2.293c.63.63.184 1.707-.707 1.707H13"></path></svg>
-                                            </div>
-                                            <div>
-                                                <h3 class="font-bold text-gray-900">Dibawa Langsung</h3>
-                                                <p class="text-xs text-gray-500">Dibawa langsung oleh team IslamicAdventurer</p>
-                                            </div>
-                                        </div>
-                                        <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-blue-600 peer-checked:bg-blue-600 flex items-center justify-center mt-1">
-                                            <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-
-                        @if($metodePengambilan === 'delivery')
-                            <div class="mt-6 animate-fade-in-down">
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Alamat Pengiriman Lengkap <span class="text-red-500">*</span>
-                                </label>
-                                <div class="relative">
-                                    <textarea wire:model="alamatPengiriman" 
-                                            rows="3" 
-                                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none resize-none"
-                                            placeholder="Nama Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan, Kota..."></textarea>
-                                    <div class="absolute top-3 right-3 text-gray-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                    </div>
-                                </div>
-                                @error('alamatPengiriman')
-                                    <p class="mt-1 text-sm text-red-500 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        {{ $message }}
-                                    </p>
-                                @enderror
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
-                        <div class="flex items-center gap-3 mb-6">
                             <div class="p-2 bg-green-50 rounded-lg text-green-600">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                             </div>
@@ -116,24 +42,24 @@
                         </div>
 
                         <div class="space-y-3">
-                            <label class="relative block cursor-pointer group">
+                            <label class="relative block cursor-pointer">
                                 <input type="radio" wire:model="metodePembayaran" value="transfer_bank" class="peer sr-only">
-                                <div class="flex items-center justify-between p-4 bg-white border-2 border-gray-200 rounded-xl peer-checked:border-green-500 peer-checked:bg-green-50/30 hover:bg-gray-50 transition-all">
+                                <div class="flex items-center p-4 pr-14 bg-white border-2 border-gray-200 rounded-xl peer-checked:border-green-500 peer-checked:bg-green-50/30 hover:bg-gray-50 transition-all">
                                     <div class="flex items-center gap-4">
                                         <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 peer-checked:bg-green-100 peer-checked:text-green-600">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
                                         </div>
                                         <span class="font-medium text-gray-900">Transfer Bank</span>
                                     </div>
-                                    <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center">
-                                        <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
-                                    </div>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center transition-all duration-200 pointer-events-none">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 </div>
                             </label>
 
-                            <label class="relative block cursor-pointer group">
+                            <label class="relative block cursor-pointer">
                                 <input type="radio" wire:model="metodePembayaran" value="e_wallet" class="peer sr-only">
-                                <div class="flex items-center justify-between p-4 bg-white border-2 border-gray-200 rounded-xl peer-checked:border-green-500 peer-checked:bg-green-50/30 hover:bg-gray-50 transition-all">
+                                <div class="flex items-center p-4 pr-14 bg-white border-2 border-gray-200 rounded-xl peer-checked:border-green-500 peer-checked:bg-green-50/30 hover:bg-gray-50 transition-all">
                                     <div class="flex items-center gap-4">
                                         <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 peer-checked:bg-green-100 peer-checked:text-green-600">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -143,24 +69,24 @@
                                             <span class="text-xs text-gray-500">GoPay, OVO, Dana, ShopeePay</span>
                                         </div>
                                     </div>
-                                    <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center">
-                                        <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
-                                    </div>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center transition-all duration-200 pointer-events-none">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 </div>
                             </label>
 
-                            <label class="relative block cursor-pointer group">
+                            <label class="relative block cursor-pointer">
                                 <input type="radio" wire:model="metodePembayaran" value="cod" class="peer sr-only">
-                                <div class="flex items-center justify-between p-4 bg-white border-2 border-gray-200 rounded-xl peer-checked:border-green-500 peer-checked:bg-green-50/30 hover:bg-gray-50 transition-all">
+                                <div class="flex items-center p-4 pr-14 bg-white border-2 border-gray-200 rounded-xl peer-checked:border-green-500 peer-checked:bg-green-50/30 hover:bg-gray-50 transition-all">
                                     <div class="flex items-center gap-4">
                                         <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 peer-checked:bg-green-100 peer-checked:text-green-600">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                         </div>
                                         <span class="font-medium text-gray-900">Cash on Delivery (COD)</span>
                                     </div>
-                                    <div class="w-5 h-5 rounded-full border border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center">
-                                        <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"></div>
-                                    </div>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center transition-all duration-200 pointer-events-none">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 </div>
                             </label>
                         </div>
@@ -221,12 +147,6 @@
                             <span class="font-semibold text-gray-900">Rp {{ number_format(collect($cart)->sum('subtotal'), 0, ',', '.') }}</span>
                         </div>
                         
-                        @if($metodePengambilan === 'delivery')
-                            <div class="flex justify-between text-gray-600 text-sm">
-                                <span>Biaya Pengiriman</span>
-                                <span class="text-green-600 font-medium">Gratis</span>
-                            </div>
-                        @endif
 
                         <div class="border-t border-gray-200 pt-3 mt-2 flex justify-between items-end">
                             <span class="font-bold text-gray-900">Total Bayar</span>

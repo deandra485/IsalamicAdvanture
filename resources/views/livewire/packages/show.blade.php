@@ -151,38 +151,27 @@
                 </h3>
                 
                 <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                    {{-- ======== LOGIKA PARSING DESKRIPSI ======== --}}
                     @php
-                        $deskripsi = $package->deskripsi ?? '';
-                        
-                        // Memisahkan Include dan Exclude berdasarkan kata "EXCLUDE:"
-                        $parts = explode('EXCLUDE:', $deskripsi);
-                        
-                        $includeText = str_replace('INCLUDE:', '', $parts[0] ?? '');
-                        $excludeText = $parts[1] ?? '';
-                        
-                        // Memecah menjadi array berdasarkan baris baru (\n)
-                        $includeListRaw = explode("\n", $includeText);
-                        $excludeListRaw = explode("\n", $excludeText);
-                        
-                        // Membersihkan spasi kosong dan tanda hubung/bullet di awal
-                        $includeList = [];
-                        foreach($includeListRaw as $item) {
-                            $cleanItem = trim(ltrim(trim($item), '- •'));
-                            if(!empty($cleanItem)) {
-                                $includeList[] = $cleanItem;
-                            }
-                        }
+                        // Baca dari kolom JSON fasilitas & exclude (data baru)
+                        $includeList = $package->fasilitas ?? [];
+                        $excludeList = $package->exclude ?? [];
 
-                        $excludeList = [];
-                        foreach($excludeListRaw as $item) {
-                            $cleanItem = trim(ltrim(trim($item), '- •'));
-                            if(!empty($cleanItem)) {
-                                $excludeList[] = $cleanItem;
+                        // Fallback: jika kolom JSON kosong, parse dari deskripsi lama
+                        if (empty($includeList) && empty($excludeList) && !empty($package->deskripsi)) {
+                            $deskripsi = $package->deskripsi ?? '';
+                            $parts = explode('EXCLUDE:', $deskripsi);
+                            $includeText = str_replace('INCLUDE:', '', $parts[0] ?? '');
+                            $excludeText = $parts[1] ?? '';
+                            foreach (explode("\n", $includeText) as $item) {
+                                $clean = trim(ltrim(trim($item), '- •'));
+                                if (!empty($clean)) $includeList[] = $clean;
+                            }
+                            foreach (explode("\n", $excludeText) as $item) {
+                                $clean = trim(ltrim(trim($item), '- •'));
+                                if (!empty($clean)) $excludeList[] = $clean;
                             }
                         }
                     @endphp
-                    {{-- ========================================== --}}
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         

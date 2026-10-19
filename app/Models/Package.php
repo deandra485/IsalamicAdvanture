@@ -12,6 +12,8 @@ class Package extends Model
         'mountain_id',
         'nama_paket',
         'deskripsi',
+        'fasilitas',
+        'exclude',
         'harga_paket',
         'durasi_hari',
         'tanggal_mulai',
@@ -23,11 +25,13 @@ class Package extends Model
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
-        'include_guide' => 'boolean',
-        'harga_paket' => 'decimal:2',
-        'durasi_hari' => 'integer',
-        'max_peserta' => 'integer',
+        'is_active'    => 'boolean',
+        'include_guide'=> 'boolean',
+        'harga_paket'  => 'decimal:2',
+        'durasi_hari'  => 'integer',
+        'max_peserta'  => 'integer',
+        'fasilitas'    => 'array',
+        'exclude'      => 'array',
     ];
 
     // Relationships
